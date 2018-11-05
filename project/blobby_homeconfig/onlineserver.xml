@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<onlineserver>
+	<server>
+		<var host="192.168.178.1"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="95.91.247.187"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="192.168.2.110"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="192.168.2.1"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="192.168.178.1"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="91.6.116.31"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="4411"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="1260"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="1275"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="3009"/>
+	</server>
+	<server>
+		<var host="10.1.10.40"/>
+		<var port="8080"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="1237"/>
+	</server>
+	<server>
+		<var host="25.60.241.143"/>
+		<var port="2620"/>
+	</server>
+	<server>
+		<var host="25.37.188.111"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="13154.134213.13215"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="1238"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="1240"/>
+	</server>
+	<server>
+		<var host="217.240.0.65"/>
+		<var port="8080"/>
+	</server>
+	<server>
+		<var host="217.240.0.65"/>
+		<var port="8080"/>
+	</server>
+	<server>
+		<var host="123.123.1^23"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="123.123.123"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="lel.lel@lel.at"/>
+		<var port="3"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="3000"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="3006"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="3005"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="3004"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="3001"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="3008"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="3002"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="3003"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="2001"/>
+	</server>
+	<server>
+		<var host="12.34.56.789"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="94.23.31.190"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="1241"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="3007"/>
+	</server>
+	<server>
+		<var host="25.185.245.44"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="46.20.46.228"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="212.224.121.3"/>
+		<var port="2296"/>
+	</server>
+	<server>
+		<var host="25.121.96.141"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="192.168.178.30"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="lukeluk.de"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="25.186.59.239"/>
+		<var port="25565"/>
+	</server>
+	<server>
+		<var host="84.189.157.8"/>
+		<var port="25565"/>
+	</server>
+	<server>
+		<var host=" 93.217.21.108"/>
+		<var port="1243"/>
+	</server>
+	<server>
+		<var host="93.217.21.108"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="217.85.12.206"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="93.217.21.108"/>
+		<var port="1243"/>
+	</server>
+	<server>
+		<var host="25.97.167.9"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="93.217.21.108"/>
+		<var port="1243"/>
+	</server>
+	<server>
+		<var host="192.168.0.2"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="98.132.565"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="11.77.99"/>
+		<var port="12344"/>
+	</server>
+	<server>
+		<var host="25.91.19.185"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="25.91.19.185"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="62.138.6.150"/>
+		<var port="2003"/>
+	</server>
+	<server>
+		<var host="25.188.225.36"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="192.168.0.101"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="detoplayz.de"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="25.132.211.66"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="11.77.99"/>
+		<var port="12344"/>
+	</server>
+	<server>
+		<var host="84.201.4.92"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="192.168.1772"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="89.41.122.250"/>
+		<var port="12364"/>
+	</server>
+	<server>
+		<var host="7.101.117.24"/>
+		<var port="2302"/>
+	</server>
+	<server>
+		<var host="84.201.4.92"/>
+		<var port="1275"/>
+	</server>
+	<server>
+		<var host="192.168.1772"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="192.168.178.40"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="84.201.4.92"/>
+		<var port="1260"/>
+	</server>
+	<server>
+		<var host="25.185.245.44"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="192.168.1.110"/>
+		<var port="1234"/>
+	</server>
+	<server>
+		<var host="192.168.2.104"/>
+		<var port="1234"/>
+	</server>
+</onlineserver>
