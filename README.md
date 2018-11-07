@@ -19,3 +19,4 @@
       * [ ] save/load the whole pool to/from a file
   * [ ] python mainscript
 * [ ] try the left right movement with one output instead of two
+* [ ] try tournament selection
