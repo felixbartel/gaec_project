@@ -5,3 +5,5 @@ __pycache__
 Makefile
 *.zip
 *.a
+project/blobby-*/src/blobby
+project/blobby-*/src/blobby-server
