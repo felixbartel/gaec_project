@@ -236,12 +236,13 @@ void setupPHYSFS()
 
 		TextManager::createTextManager(gameConfig.getString("language"));
 
+#ifndef VERSION_FAST
 		if(gameConfig.getString("device") == "SDL")
 			rmanager = RenderManager::createRenderManagerSDL();
 		/*else if (gameConfig.getString("device") == "GP2X")
 			rmanager = RenderManager::createRenderManagerGP2X();*/
-#ifndef __ANDROID__
-	#ifndef __APPLE__
+	#ifndef __ANDROID__
+		#ifndef __APPLE__
 		else if (gameConfig.getString("device") == "OpenGL")
 			rmanager = RenderManager::createRenderManagerGL2D();
 		else
@@ -250,8 +251,8 @@ void setupPHYSFS()
 			std::cerr << "Falling back to OpenGL" << std::endl;
 			rmanager = RenderManager::createRenderManagerGL2D();
 		}
-	#else
-		#if MAC_OS_X
+		#else
+			#if MAC_OS_X
 			else if (gameConfig.getString("device") == "OpenGL")
 				rmanager = RenderManager::createRenderManagerGL2D();
 			else
@@ -260,10 +261,12 @@ void setupPHYSFS()
 				std::cerr << "Falling back to OpenGL" << std::endl;
 				rmanager = RenderManager::createRenderManagerGL2D();
 			}
+			#endif
 		#endif
 	#endif
+#else
+		rmanager = RenderManager::createRenderManagerNull();
 #endif
-
 		// fullscreen?
 		if(gameConfig.getString("fullscreen") == "true")
 			rmanager->init(BASE_RESOLUTION_X, BASE_RESOLUTION_Y, true);
