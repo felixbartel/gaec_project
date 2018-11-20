@@ -2,7 +2,7 @@
 
 * [ ] reprogram everything prperly
   * [ ] BlobbyVolley
-    * [ ] hide the BlobbyVolley window or at least change it so that is does not need to be focused
+    * [x] hide the BlobbyVolley window or at least change it so that is does not need to be focused
     * [x] make it use another config directory than the home directory
   * [ ] python classes
     * [ ] one for one bot with
