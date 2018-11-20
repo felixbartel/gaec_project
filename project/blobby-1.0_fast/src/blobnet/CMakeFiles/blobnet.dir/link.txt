@@ -1,2 +1,0 @@
-/usr/bin/ar qc libblobnet.a  CMakeFiles/blobnet.dir/layer/Http.cpp.o
-/usr/bin/ranlib libblobnet.a

@@ -1,2 +1,0 @@
-/usr/bin/ar qc libraknet.a  CMakeFiles/raknet.dir/BitStream.cpp.o CMakeFiles/raknet.dir/GetTime.cpp.o CMakeFiles/raknet.dir/InternalPacketPool.cpp.o CMakeFiles/raknet.dir/NetworkTypes.cpp.o CMakeFiles/raknet.dir/PacketPool.cpp.o CMakeFiles/raknet.dir/RakClient.cpp.o CMakeFiles/raknet.dir/RakNetStatistics.cpp.o CMakeFiles/raknet.dir/RakPeer.cpp.o CMakeFiles/raknet.dir/RakServer.cpp.o CMakeFiles/raknet.dir/ReliabilityLayer.cpp.o CMakeFiles/raknet.dir/SimpleMutex.cpp.o CMakeFiles/raknet.dir/SocketLayer.cpp.o
-/usr/bin/ranlib libraknet.a

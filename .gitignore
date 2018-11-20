@@ -1,3 +1,7 @@
 CMakeCache.txt
 CMakeFiles
 __pycache__
+*.cmake
+Makefile
+*.zip
+*.a
