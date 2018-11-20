@@ -4,6 +4,8 @@ ADD_DEFINITIONS(-std=c++11)
 add_subdirectory(raknet)
 add_subdirectory(blobnet)
 
+add_definitions(-DVERSION_FAST)
+
 add_definitions(-DTIXML_USE_STL)
 set(CMAKE_CXX_FLAGS "-std=c++11")
 set(CMAKE_CXX_FLAGS "-Wall")

@@ -19,8 +19,8 @@ class BB:
 
     def compute_fitness(self):
         self.set_bot()
-        subprocess.run('sed -i \'s/<var name="gamefps" value=".*/<var name="gamefps" value="7500"\/>/\' ~/.blobby/config.xml', shell=True)
-        os.chdir('/home/flax/blobby/blobby-1.0_fast')
+        subprocess.run('sed -i \'s/<var name="gamefps" value=".*/<var name="gamefps" value="7500"\/>/\' blobby-1.0_fast/data/config.xml', shell=True)
+        os.chdir('blobby-1.0_fast')
         score = subprocess.run('./src/blobby', stdout=subprocess.PIPE)
 
         score = score.stdout.decode('utf-8').split('\n')
@@ -29,7 +29,7 @@ class BB:
         score_right = int(score[2])
         self.fitness = (score_left-score_right+25)/50
 
-        subprocess.run('sed -i \'s/<var name="gamefps" value=".*/<var name="gamefps" value="75"\/>/\' ~/.blobby/config.xml', shell=True)
+        subprocess.run('sed -i \'s/<var name="gamefps" value=".*/<var name="gamefps" value="75"\/>/\' blobby-1.0_fast/data/config.xml', shell=True)
 
 
     def set_bot(self):
@@ -64,8 +64,8 @@ class BB:
                 b_str += ','
         b_str += '}\n'
 
-        f_template = open('/home/flax/blobby/nn_template.lua','r')
-        f = open('/home/flax/.blobby/scripts/nn.lua','w')
+        f_template = open('nn_template.lua','r')
+        f = open('blobby-1.0_fast/data/.blobby/scripts/nn.lua','w')
         f.write(W_str + b_str + f_template.read())
         f.close()
         f_template.close()
@@ -102,8 +102,8 @@ class BB:
                 b_str += ','
         b_str += '}\n'
 
-        f_template = open('/home/flax/blobby/nn_template.lua','r')
-        f = open('/home/flax/.blobby/scripts/nn_max.lua','w')
+        f_template = open('nn_template.lua','r')
+        f = open('blobby-1.0_fast/data/.blobby/scripts/nn_max.lua','w')
         f.write(W_str + b_str + f_template.read())
         f.close()
         f_template.close()

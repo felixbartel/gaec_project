@@ -51,6 +51,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "FileSystem.h"
 #include "state/State.h"
 
+#ifdef VERSION_FAST
+	#define GAMEDATADIR "data"
+#endif
+
 #if defined(WIN32)
 #ifndef GAMEDATADIR
 #define GAMEDATADIR "data"
@@ -111,14 +115,18 @@ void setupPHYSFS()
 		#ifndef __ANDROID__
 			// Create a search path in the home directory and ensure that
 			// all paths exist and are actually directories
-			#ifdef __APPLE__
-				#if TARGET_OS_IPHONE
-					std::string userdir = baseSearchPath + "../Documents/";
+			#ifdef VERSION_FAST
+				std::string userdir = baseSearchPath;
+			#else
+			 	#ifdef __APPLE__
+					#if TARGET_OS_IPHONE
+						std::string userdir = baseSearchPath + "../Documents/";
+					#else
+						std::string userdir = fs.getUserDir();
+					#endif
 				#else
 					std::string userdir = fs.getUserDir();
 				#endif
-			#else
-				std::string userdir = fs.getUserDir();
 			#endif
 			std::string userAppend = ".blobby";
 			std::string homedir = userdir + userAppend;
