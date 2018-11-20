@@ -1,7 +1,7 @@
 # TODO
 
 * [ ] reprogram everything prperly
-  * [ ] BlobbyVolley
+  * [x] BlobbyVolley
     * [x] hide the BlobbyVolley window or at least change it so that is does not need to be focused
     * [x] make it use another config directory than the home directory
   * [ ] python classes
