@@ -20,6 +20,7 @@ class BB:
     def compute_fitness(self):
         self.set_bot()
         subprocess.run('sed -i \'s/<var name="gamefps" value=".*/<var name="gamefps" value="7500"\/>/\' blobby-1.0_fast/data/config.xml', shell=True)
+        working_dir = os.getcwd()
         os.chdir('blobby-1.0_fast')
         score = subprocess.run('./src/blobby', stdout=subprocess.PIPE)
 
@@ -30,7 +31,7 @@ class BB:
         self.fitness = (score_left-score_right+25)/50
 
         subprocess.run('sed -i \'s/<var name="gamefps" value=".*/<var name="gamefps" value="75"\/>/\' blobby-1.0_fast/data/config.xml', shell=True)
-
+        os.chdir(working_dir)
 
     def set_bot(self):
         W_str = ''

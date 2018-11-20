@@ -7,3 +7,5 @@ Makefile
 *.a
 project/blobby-*/src/blobby
 project/blobby-*/src/blobby-server
+project/blobby-1.0_fast/data/.blobby/scripts/nn.lua
+project/blobby-1.0_fast/data/.blobby/scripts/nn_max.lua
