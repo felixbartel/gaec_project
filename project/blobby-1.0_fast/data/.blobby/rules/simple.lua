@@ -12,7 +12,7 @@ __TITLE__  = "BV2 Default Rules"
 --		params:		lscore: score of left player
 --					rscore: score of right player
 --		return: whether a player has won
-function IsWinning(lscore, rscore) 
+function IsWinning(lscore, rscore)
 	-- constant SCORE_TO_WIN: number of points for a player to win
 	if lscore >= SCORE_TO_WIN then
 		return true
@@ -33,19 +33,19 @@ function OnBallHitsPlayer(player)
 	--		PREDEFINED
 	--		param:	player - player whos touches you want to get
 	--		return:	how many touches did player
-	
+
 	--	function opponent
 	--		PREDEFINED
 	--		param:	player - player of whom you want to get the opponent
 	--		return:	opponent of the player, so, for LEFT_PLAYER, RIGHT_PLAYER is returned and vice-versa
-	
+
 	--	function mistake
 	--		PREDEFINED
 	--		params:	mistakeSide - player who made a mistake
 	--				serveSide - player who should make a serve
 	--				amount - how many points opponent of mistakeSide gets
 	--		return: none
-	
+
 	if touches(player) > 3 then
 		mistake(player, opponent(player), 1)
 	end
@@ -95,4 +95,4 @@ function HandleInput(player, left, right, up)
 end
 
 -- uncomment this to change number of points for a player to win
-SCORE_TO_WIN = 25
+-- SCORE_TO_WIN = 25

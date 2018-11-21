@@ -1,4 +1,5 @@
 import os
+import glob
 import subprocess
 import numpy as np
 
@@ -8,6 +9,10 @@ with open('blobby-1.0_fast/data/.blobby/config.xml','r') as f:
 
 with open('nn_template.lua','r') as f:
     nn_template = f.read()
+
+# Clean old .xml files
+for f in glob.glob("blobby-1.0_fast/data/.blobby/config_*.xml"):
+    os.remove(f)
 
 class BB:
     def __init__(self, W, b, id):
@@ -43,7 +48,7 @@ class BB:
         score = score[len(score)-2].split(':')
         score_left = int(score[1])
         score_right = int(score[2])
-        self.fitness = (score_left-score_right+25)/50
+        self.fitness = score_left/(score_left+score_right)
 
     def set_bot(self):
         W_str = ''
