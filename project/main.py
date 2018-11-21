@@ -26,7 +26,7 @@ for gen in range(maxgen):
             dist = np.cumsum(fbar/np.sum(fbar))
 
         indicator = (fitness[int(0.1*N),gen-1]-fitness[int(0.9*N),gen-1])/(fitness[0,gen-1]-fitness[N-1,gen-1])
-        print('generation time: {:1.4f} indicator: {}'.format(time.time() - gen_time, indicator))
+        print('generation time: {:1.4f}/{:1.4f} indicator: {}'.format(fitness_time, time.time() - gen_time, indicator))
         gen_time = time.time()
         if gen > 4:
             if indicator <= 0.2:
@@ -64,6 +64,7 @@ for gen in range(maxgen):
                 offspring[n].b[i] = offspring[n].b[i]+sigma*mask*np.random.randn(l[i+1],1)
 
     # compute fitness
+    fitness_time = time.time()
     threads = [threading.Thread(target=o.compute_fitness) for o in offspring]
 
     for t in threads:
@@ -71,6 +72,7 @@ for gen in range(maxgen):
 
     for t in threads:
         t.join()
+    fitness_time = time.time() - fitness_time
 
 #    pool = bots+offspring # has to have at least N individuals
     pool = offspring # generational algorithm
