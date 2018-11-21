@@ -7,9 +7,10 @@ from copy import copy
 import threading
 
 l = [7,9,3] # neuronal network size
-N = 100;      # population size
-maxgen = 1000;
-sigma = 0.01;
+N = 100      # population size
+maxgen = 1000
+sigma = 0.01
+np.random.seed(0)
 
 bots = [None]*N
 offspring = [BB.random(l, id) for id in range(N)]

@@ -2,6 +2,7 @@ import os
 import glob
 import subprocess
 import numpy as np
+from copy import copy
 
 # Get a template once at import
 with open('blobby-1.0_fast/data/.blobby/config.xml','r') as f:
@@ -20,8 +21,8 @@ class BB:
         self.config_fname = 'config_{:04d}.xml'.format(id)
         self.config_path = 'blobby-1.0_fast/data/.blobby/' + self.config_fname
         self.nn_path = 'blobby-1.0_fast/data/.blobby/scripts/nn_{:04d}.lua'.format(id)
-        self.W = W
-        self.b = b
+        self.W = copy(W)
+        self.b = copy(b)
         self.fitness = np.nan
 
         self.config_string = config_template.replace('<var name="left_script_name" value="nn"/>',
