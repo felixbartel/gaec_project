@@ -207,6 +207,10 @@ void setupPHYSFS()
 	SoundManager *smanager = 0;
 
 
+	std::string config_path = "config.xml";
+	if (argc > 1)
+		config_path = std::string(argv[1]);
+
 	// Test Version Startup Warning
 	#ifdef TEST_VERSION
 	struct tm* ptm;
@@ -231,19 +235,18 @@ void setupPHYSFS()
 
 	try
 	{
-		UserConfig gameConfig;
-		gameConfig.loadFile("config.xml");
+		boost::shared_ptr<IUserConfigReader> gameConfig = IUserConfigReader::createUserConfigReader(config_path);
 
-		TextManager::createTextManager(gameConfig.getString("language"));
+		TextManager::createTextManager(gameConfig->getString("language"));
 
 #ifndef VERSION_FAST
-		if(gameConfig.getString("device") == "SDL")
+		if(gameConfig->getString("device") == "SDL")
 			rmanager = RenderManager::createRenderManagerSDL();
-		/*else if (gameConfig.getString("device") == "GP2X")
+		/*else if (gameConfig->getString("device") == "GP2X")
 			rmanager = RenderManager::createRenderManagerGP2X();*/
 	#ifndef __ANDROID__
 		#ifndef __APPLE__
-		else if (gameConfig.getString("device") == "OpenGL")
+		else if (gameConfig->getString("device") == "OpenGL")
 			rmanager = RenderManager::createRenderManagerGL2D();
 		else
 		{
@@ -253,7 +256,7 @@ void setupPHYSFS()
 		}
 		#else
 			#if MAC_OS_X
-			else if (gameConfig.getString("device") == "OpenGL")
+			else if (gameConfig->getString("device") == "OpenGL")
 				rmanager = RenderManager::createRenderManagerGL2D();
 			else
 			{
@@ -268,29 +271,29 @@ void setupPHYSFS()
 		rmanager = RenderManager::createRenderManagerNull();
 #endif
 		// fullscreen?
-		if(gameConfig.getString("fullscreen") == "true")
+		if(gameConfig->getString("fullscreen") == "true")
 			rmanager->init(BASE_RESOLUTION_X, BASE_RESOLUTION_Y, true);
 		else
 			rmanager->init(BASE_RESOLUTION_X, BASE_RESOLUTION_Y, false);
 
-		if(gameConfig.getString("show_shadow") == "true")
+		if(gameConfig->getString("show_shadow") == "true")
 			rmanager->showShadow(true);
 		else
 			rmanager->showShadow(false);
 
-		SpeedController scontroller(gameConfig.getFloat("gamefps"));
+		SpeedController scontroller(gameConfig->getFloat("gamefps"));
 		SpeedController::setMainInstance(&scontroller);
-		scontroller.setDrawFPS(gameConfig.getBool("showfps"));
+		scontroller.setDrawFPS(gameConfig->getBool("showfps"));
 
 		smanager = SoundManager::createSoundManager();
 		smanager->init();
-		smanager->setVolume(gameConfig.getFloat("global_volume"));
-		smanager->setMute(gameConfig.getBool("mute"));
+		smanager->setVolume(gameConfig->getFloat("global_volume"));
+		smanager->setMute(gameConfig->getBool("mute"));
 		/// \todo play sound is misleading. what we actually want to do is load the sound
 		smanager->playSound("sounds/bums.wav", 0.0);
 		smanager->playSound("sounds/pfiff.wav", 0.0);
 
-		std::string bg = std::string("backgrounds/") + gameConfig.getString("background");
+		std::string bg = std::string("backgrounds/") + gameConfig->getString("background");
 		if ( FileSystem::getSingleton().exists(bg) )
 			rmanager->setBackground(bg);
 

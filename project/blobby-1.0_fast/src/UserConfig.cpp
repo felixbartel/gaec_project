@@ -46,8 +46,9 @@ std::map<std::string, boost::shared_ptr<IUserConfigReader> >& userConfigCache()
 
 boost::shared_ptr<IUserConfigReader> IUserConfigReader::createUserConfigReader(const std::string& file)
 {
+    std::cout << "Creating config with file " << file << '\n';
 	// if we have this userconfig already cached, just return from cache
-	std::map<std::string, boost::shared_ptr<IUserConfigReader> >:: iterator cfg_cached = userConfigCache().find(file);
+	std::map<std::string, boost::shared_ptr<IUserConfigReader> >:: iterator cfg_cached = userConfigCache().find("0");
 	if( cfg_cached != userConfigCache().end() )
 	{
 		return cfg_cached->second;
@@ -59,7 +60,7 @@ boost::shared_ptr<IUserConfigReader> IUserConfigReader::createUserConfigReader(c
 	boost::shared_ptr<IUserConfigReader> config(uc);
 
 	// ... and add to cache
-	userConfigCache()[file] = config;
+	userConfigCache()["0"] = config;
 
 	return config;
 }
@@ -271,4 +272,3 @@ UserConfigVar* UserConfig::findVarByName(const std::string& name) const
 
 	return nullptr;
 }
-

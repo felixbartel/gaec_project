@@ -2,12 +2,28 @@ import os
 import subprocess
 import numpy as np
 
+# Get a template once at import
+with open('blobby-1.0_fast/data/.blobby/config.xml','r') as f:
+    config_template = f.read()
+
+with open('nn_template.lua','r') as f:
+    nn_template = f.read()
+
 class BB:
-    def __init__(self,W,b):
+    def __init__(self, W, b, id):
+        self.id = id
+        self.config_fname = 'config_{:04d}.xml'.format(id)
+        self.config_path = 'blobby-1.0_fast/data/.blobby/' + self.config_fname
+        self.nn_path = 'blobby-1.0_fast/data/.blobby/scripts/nn_{:04d}.lua'.format(id)
         self.W = W
         self.b = b
         self.fitness = np.nan
 
+        self.config_string = config_template.replace('<var name="left_script_name" value="nn"/>',
+                                                     '<var name="left_script_name" value="nn_{:04d}"/>'.format(self.id))
+        if not os.path.isfile(self.config_path):
+            with open(self.config_path, 'w') as f:
+                f.write(self.config_string)
 
     def l(self):
         l = []
@@ -16,22 +32,18 @@ class BB:
         l.append(np.shape(self.W[-1])[0])
         return l
 
-
     def compute_fitness(self):
         self.set_bot()
-        working_dir = os.getcwd()
-        os.chdir('blobby-1.0_fast')
-        subprocess.run('sed -i \'s/<var name="gamefps" value=".*/<var name="gamefps" value="7500"\/>/\' data/.blobby/config.xml', shell=True)
-        score = subprocess.run('./src/blobby', stdout=subprocess.PIPE)
+
+        score = subprocess.run(['./src/blobby', self.config_fname],
+                               stdout=subprocess.PIPE,
+                               cwd='blobby-1.0_fast')
 
         score = score.stdout.decode('utf-8').split('\n')
         score = score[len(score)-2].split(':')
         score_left = int(score[1])
         score_right = int(score[2])
         self.fitness = (score_left-score_right+25)/50
-
-        subprocess.run('sed -i \'s/<var name="gamefps" value=".*/<var name="gamefps" value="75"\/>/\' data/.blobby/config.xml', shell=True)
-        os.chdir(working_dir)
 
     def set_bot(self):
         W_str = ''
@@ -65,11 +77,8 @@ class BB:
                 b_str += ','
         b_str += '}\n'
 
-        f_template = open('nn_template.lua','r')
-        f = open('blobby-1.0_fast/data/.blobby/scripts/nn.lua','w')
-        f.write(W_str + b_str + f_template.read())
-        f.close()
-        f_template.close()
+        with open(self.nn_path,'w') as f:
+            f.write(W_str + b_str + nn_template)
 
     def set_bot2(self):
         W_str = ''
@@ -103,28 +112,14 @@ class BB:
                 b_str += ','
         b_str += '}\n'
 
-        f_template = open('nn_template.lua','r')
-        f = open('blobby-1.0_fast/data/.blobby/scripts/nn_max.lua','w')
-        f.write(W_str + b_str + f_template.read())
-        f.close()
-        f_template.close()
+        with open('blobby-1.0_fast/data/.blobby/scripts/nn_max.lua','w') as f:
+            f.write(W_str + b_str + nn_template)
 
-    def copy(self):
-        W = []
-        b = []
-        for i in range(len(self.W)):
-            W.append(self.W[i])
-            b.append(self.b[i])
-        bb = BB(W,b)
-        bb.fitness = self.fitness
-        return bb
-
-
-    @classmethod
-    def random(cls,l):
+    @staticmethod
+    def random(l, id):
         W = []
         b = []
         for i in range(len(l)-1):
             W.append(np.random.rand(l[i+1],l[i])-0.5)
             b.append(np.random.rand(l[i+1],1)-0.5)
-        return BB(W,b)
+        return BB(W, b, id)

@@ -8,4 +8,5 @@ Makefile
 project/blobby-*/src/blobby
 project/blobby-*/src/blobby-server
 project/blobby-1.0_fast/data/.blobby/scripts/nn.lua
-project/blobby-1.0_fast/data/.blobby/scripts/nn_max.lua
+project/blobby-1.0_fast/data/.blobby/scripts/nn_*.lua
+project/blobby-1.0_fast/data/.blobby/config_*.xml
