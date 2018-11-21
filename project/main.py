@@ -9,7 +9,7 @@ import threading
 l = [7,9,3] # neuronal network size
 N = 100      # population size
 maxgen = 1000
-sigma = 0.01
+sigma = 0.05
 np.random.seed(0)
 
 bots = [None]*N
@@ -28,24 +28,21 @@ for gen in range(maxgen):
             dist = np.cumsum(fbar/np.sum(fbar))
 
         indicator = (fitness[int(0.1*N),gen-1]-fitness[int(0.9*N),gen-1])/(fitness[0,gen-1]-fitness[N-1,gen-1])
-        print('generation time: {:1.4f}s/{:1.4f}s indicator: {}'.format(fitness_time, time.time() - gen_time, indicator))
+        print('generation time: {:1.4f}s/{:1.4f}s; indicator: {:0.3f}; sigma: {:0.3f}'.format(
+                fitness_time, time.time() - gen_time, indicator, sigma))
         gen_time = time.time()
         if gen > 4:
-            if indicator <= 0.2:
-                sigma = sigma+0.01
-            elif indicator > 0.3:
-                sigma = sigma-0.01
+            if indicator <= 0.5:
+                sigma = sigma+0.002
+            elif indicator > 0.5:
+                sigma = sigma-0.002
             if sigma < 0.01:
                 sigma = 0.01
             if sigma > 0.05:
                 sigma = 0.05
 
-        # Keep the best two instances
-        offspring[0] = BB(bots[0].W, bots[0].b, 0)
-        offspring[1] = BB(bots[1].W, bots[1].b, 1)
-
         # crossover
-        for n in range(1, int(N/2)):
+        for n in range(int(N/2)):
             r = np.random.rand(2);
             for n1 in range(N):
                 if r[0] < dist[n1]:
@@ -64,11 +61,11 @@ for gen in range(maxgen):
                         offspring[2*n+1].b[i][j] = bots[n1].b[i][j]
 
         # mutation
-        for n in range(2, N):
+        for n in range(N):
             for i in range(len(offspring[n].W)):
-                mask = np.less(np.random.rand(*((offspring[n].W[i]).shape)),sigma)
+                mask = np.less(np.random.random_sample(offspring[n].W[i].shape),sigma)
                 offspring[n].W[i] = offspring[n].W[i]+sigma*mask*np.random.randn(l[i+1],l[i])
-                mask = np.less(np.random.rand(*((offspring[n].b[i]).shape)),sigma)
+                mask = np.less(np.random.random_sample(offspring[n].b[i].shape),sigma)
                 offspring[n].b[i] = offspring[n].b[i]+sigma*mask*np.random.randn(l[i+1],1)
 
     # compute fitness

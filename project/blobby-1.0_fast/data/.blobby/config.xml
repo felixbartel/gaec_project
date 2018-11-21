@@ -21,7 +21,7 @@
 	<var name="gamefps" value="750000"/>
 	<var name="global_volume" value="1.000000"/>
 	<var name="mute" value="true"/>
-	<var name="scoretowin" value="100"/>
+	<var name="scoretowin" value="10"/>
 	<var name="showfps" value="true"/>
 	<var name="blood" value="false"/>
 	<var name="background" value="strand2.bmp"/>
