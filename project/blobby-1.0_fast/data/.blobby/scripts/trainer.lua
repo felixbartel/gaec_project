@@ -1,11 +1,16 @@
+ntouches = 0
+oldtouches = 0
+
 function OnBounce()
 end
 
 function OnOpponentServe()
+  ntouches = 0
   moveto(130)
 end
 
 function OnServe(ballready)
+  ntouches = 0
   pos = ballx()-45+5*(getScore()%7)
   moveto(pos)
   if pos-3 < posx() and posx() < pos+3 then
@@ -16,7 +21,11 @@ function OnServe(ballready)
 end
 
 function OnGame()
-  if ballx() < 400 then -- ball on our site
+  if touches() ~= oldtouches then
+    ntouches = ntouches+1
+    oldtouches = touches()
+  end
+  if ballx() < 400 and ntouches < 5 then -- ball on our site
     moveto(ballx()+5*bspeedx()-5*((getScore()+getOppScore())%4)-15)
     if ballx()-posx() < -10*bspeedx()+5 then
       jump()

@@ -3,24 +3,20 @@ function OnBounce()
 end
 
 function OnOpponentServe()
-  moveto(130) -- Wenn der Gegner spielt, in Ausgangsposition gehen
+  moveto(130)
 end
 
 function OnServe(ballready)
-  moveto(ballx() - 20) -- Etwas links vom Ball hinstellen
+  moveto(ballx() - 20)
   if posx() < ballx() - 17 and posx() > ballx() - 23 then
-       -- Dieser zugegeben etwas komplizierte Ausdruck bewirkt, dass
-       -- man sich erstmal unterhalb des Balles befinden muss. Leider muss
-       -- das so aufwendig gemacht werden, weil moveto() niemals eine Stelle
-       -- ganz exakt erreicht.
     if ballready then 
-      jump() -- Natürlich nur springen wenn der Ball schon bereitsteht
+      jump()
     end
   end
 end
 
 function OnGame()
-  input = {posx(), posy(), launched(), ballx()-posx(), bally()-posy(), bspeedx(), bspeedy()}
+  input = {2*posx()/CONST_FIELD_WIDTH, posy()/400, (ballx()-posx())/CONST_FIELD_WIDTH, 2*(bally()-posy())/CONST_FIELD_WIDTH, bspeedx()/10, bspeedy()/10}
   output = feed_forward(input)
   decide_what_to_do(output)
 end
@@ -48,16 +44,13 @@ end
 
 
 function decide_what_to_do(output)
-  if output[1] > output[2] then
-    if output[1] > 0.5 then
-      left()
-    end
-  else
-    if output[2] > 0.5 then
-      right()
-    end
+  if output[1] < 0.45 then
+    left()
   end
-  if output[3] > 0.75 then
+  if output[1] > 0.55 then
+    right()
+  end
+  if output[2] > 0.6 then
     jump()
   end
 end
