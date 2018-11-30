@@ -7,14 +7,14 @@ import time
 
 
 np.random.seed(7)       # because 7 is a lucky number
-size = [6,6,2]        # size of the neuronal networks
+size = [6,7,2]          # size of the neuronal networks
 N = 100                 # population size
 maxgen = 100            # maximal number of generation
 p_crossover = 0.9       # crossove parameters
-crossover_rate = 0.5    
+crossover_rate = 0.3
 p_mutation = 0.7
-mutation_rate = 0.05    #mutation parameters
-mutation_sigma = 0.1    
+mutation_rate = 0.05    # mutation parameters
+mutation_sigma = 0.05
 n_elitism = 5           # keep the best individuals
 
 fig = plt.figure(figsize=(10,5))

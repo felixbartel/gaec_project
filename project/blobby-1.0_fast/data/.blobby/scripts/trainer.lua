@@ -23,7 +23,7 @@ function OnServe(ballready)
 end
 
 function OnGame()
-  if ntouches < 1 then
+  if ntouches < 2 then
     if touches() ~= 0 and touches() ~= oldtouches then
       ntouches = ntouches+1
       oldtouches = touches()
