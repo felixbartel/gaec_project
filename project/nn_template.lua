@@ -1,4 +1,3 @@
-
 function OnBounce()
 end
 
@@ -24,20 +23,21 @@ end
 
 function feed_forward(x)
   for i = 1,#W do
-    x = activate(x,W[i],b[i])
+    x = activate(x,W[i])
   end
   return x
 end
 
 
-function activate(x,Wi,b) -- using the sigmoid function 1/(1+exp(-x))
+function activate(x,Wi) -- using the sigmoid function 1/(1+exp(-x))
   local y = {}
+  x[#x+1] = 1
   for i = 1,#Wi do
     y[i] = 0
     for j = 1,#Wi[1] do
       y[i] = y[i]+Wi[i][j]*x[j]
     end
-    y[i] = 1/(1+math.exp(-(y[i]+b[i])))
+    y[i] = 1/(1+math.exp(-y[i]))
   end
   return y
 end
@@ -50,7 +50,7 @@ function decide_what_to_do(output)
   if output[1] > 0.55 then
     right()
   end
-  if output[2] > 0.6 then
+  if output[2] > 0.7 then
     jump()
   end
 end
