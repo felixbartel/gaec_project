@@ -19,6 +19,14 @@ class BBOTPOOL:
         fitness.fill(np.nan)
         return BBOTPOOL(bbots, fitness)
 
+    @staticmethod
+    def zeros(N):
+        # creates an empty bbotpool
+        bbots = [BBOT(0, id) for id in range(N)]
+        fitness = np.empty(N)
+        fitness.fill(np.nan)
+        return BBOTPOOL(bbots, fitness)
+
     def __getitem__(self, key):
         bbots = self.bbots[key]
         fitness = self.fitness[key]
@@ -27,8 +35,8 @@ class BBOTPOOL:
         return BBOTPOOL(bbots, fitness);
 
     def __setitem__(self, key, pool):
-        self.bbots[key] = pool.bbots[key]
-        self.fitness[key] = pool.fitness[key]
+        self.bbots[key] = pool.bbots
+        self.fitness[key] = pool.fitness
         for n in range(len(self.bbots)):
             self.bbots[n].id = n
 
@@ -46,44 +54,57 @@ class BBOTPOOL:
         else: # don't compute fitnesses we already know
             nofitness = np.isnan(self.fitness)
             idx = np.nonzero(nofitness)[0]
-        threads = [threading.Thread(target=bbot.compute_fitness) for bbot in [ self.bbots[j] for j in idx]]
-        for t in threads:
-            t.start()
-        for t in threads:
-            t.join()
-        self.fitness[idx] = np.array([ bbot.fitness for bbot in [ self.bbots[j] for j in idx]])
+        chunks = list(range(0, len(idx), 50)) # maximal parallel threads
+        chunks.append(len(idx))
+
+        for j in range(len(chunks)-1):
+            idx_chunk = [ idx[n] for n in range(chunks[j],chunks[j+1]) ]
+            threads = [threading.Thread(target=bbot.compute_fitness) for bbot in [ self.bbots[j] for j in idx_chunk]]
+            for t in threads:
+                t.start()
+            for t in threads:
+                t.join()
+            self.fitness[idx_chunk] = np.array([ bbot.fitness for bbot in [ self.bbots[j] for j in idx_chunk]])
         self.sort()
 
     def sort(self):
         idx = np.argsort(-self.fitness)
-        bbots_tmp = [self.bbots[j] for j in idx]
-        fitness_tmp = self.fitness[idx]
-        self.bbots = bbots_tmp
-        self.fitness = fitness_tmp
+        bbots = [self.bbots[j] for j in idx]
+        fitness = self.fitness[idx]
+        self.bbots = bbots
+        self.fitness = fitness
 
     def max2file(self):
         self.sort()
         self.bbots[0].set_bot('nn_max.lua')
 
-    def crossover_rouletta_wheel(self, p_crossover, rate):
-        offspring = deepcopy(self)
+    def crossover_rouletta_wheel(self, N, p_crossover, rate):
+        N = round(N/2)*2
         if np.sum(self.fitness) == 0:
             dist = np.arange(len(self))/len(self) # uniform wheel
         else:
-            fbar = (self.fitness+1)**3
+            fbar = (self.fitness+1)**2
             dist = np.cumsum(fbar/np.sum(fbar))
-        for n in range(int(len(self)/2)):
-            r = np.random.rand(2);
-            for n1 in range(len(self)):
-                if r[0] < dist[n1]:
+
+        idx = []
+        for x in np.random.rand(N):
+            for n in range(len(self)):
+                if x < dist[n]:
+                    idx.append(n)
                     break
-            for n2 in range(len(self)):
-                if r[1] < dist[n2]:
-                    break
+
+        offspring = BBOTPOOL.zeros(N)
+        for n in range(int(N/2)):
             if np.random.rand() < p_crossover:
-                crossover_mix_nodes(self.bbots[n1], self.bbots[n2], offspring.bbots[2*n], offspring.bbots[2*n+1], rate)
+                crossover_mix_nodes(self.bbots[idx[2*n]], self.bbots[idx[2*n+1]], offspring.bbots[2*n], offspring.bbots[2*n+1], rate)
                 offspring.fitness[2*n] = np.nan
                 offspring.fitness[2*n+1] = np.nan
+            else:
+                offspring.bbots[2*n] = self.bbots[idx[2*n]]
+                offspring.bbots[2*n+1] = self.bbots[idx[2*n+1]]
+                offspring.fitness[2*n] = self.fitness[idx[2*n]]
+                offspring.fitness[2*n+1] = self.fitness[idx[2*n+1]]
+
         return offspring
 
     def mutate_gaussian(self, p_mutation, rate, sigma):

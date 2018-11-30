@@ -44,10 +44,10 @@ end
 
 
 function decide_what_to_do(output)
-  if output[1] < 0.45 then
+  if output[1] < 0.49 then
     left()
   end
-  if output[1] > 0.55 then
+  if output[1] > 0.51 then
     right()
   end
   if output[2] > 0.7 then

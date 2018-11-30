@@ -19,6 +19,7 @@
       * [ ] save/load the whole pool to/from a file
   * [x] python mainscript
 * [x] try the left right movement with one output instead of two
+* [ ] improve the threading while preserving a maximal number of them
 * [ ] try tournament selection
 * [ ] when two nodes are switched with their weights and bias the network stays the same -> find a better representation or take care of this in crossover
 * [ ] try the stuff Sims proposed in his creatures paper
