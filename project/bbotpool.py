@@ -83,7 +83,7 @@ class BBOTPOOL:
         if np.sum(self.fitness) == 0:
             dist = np.arange(len(self))/len(self) # uniform wheel
         else:
-            fbar = (self.fitness+1)**2
+            fbar = (self.fitness+1)
             dist = np.cumsum(fbar/np.sum(fbar))
 
         idx = []
