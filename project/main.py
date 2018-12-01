@@ -16,7 +16,7 @@ crossover_rate = 0.5
 p_mutation = 0.5
 mutation_rate = 0.5     # mutation parameters
 mutation_sigma = 0.01
-n_elitism = 30          # keep the best individuals
+n_elitism = 10          # keep the best individuals
 
 fig = plt.figure(figsize=(10,5))
 pool = BBOTPOOL.random(size, N)
