@@ -10,3 +10,12 @@ project/blobby-*/src/blobby-server
 project/blobby-1.0_fast/data/.blobby/scripts/nn.lua
 project/blobby-1.0_fast/data/.blobby/scripts/nn_*.lua
 project/blobby-1.0_fast/data/.blobby/config_*.xml
+project_proposal/*.aux
+project_proposal/*.fdb_latexmk
+project_proposal/*.fls
+project_proposal/*.log
+project_proposal/*.out
+project_proposal/*.pdf
+project_proposal/*.gz
+project_proposal/*.bbl
+project_proposal/*.blg

@@ -1,8 +1,12 @@
 \documentclass[11pt,a4paper]{scrartcl}
 %{{{ general stuff
+\usepackage[a4paper,bindingoffset=0.2in,%
+            left=1in,right=1in,top=1in,bottom=1in,%
+            footskip=.25in]{geometry}
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{cite}
 \usepackage[hidelinks]{hyperref}
 \usepackage{float} % use H in figure placement
 \pagenumbering{gobble}
@@ -29,48 +33,65 @@
 %===============================================================================
 
 \date{}
+\title{Project Proposal for Genetic Algorithms and Evolutionary Programming}
+\author{Felix Bartel and D\'avid Kerekes}
 
 \begin{document}
 
-\section*{Project Proposal for Genetic Algorithms and Evolutionary Programming
-by Felix Bartel and D\' avid Kerekes}
+\maketitle
 
-We want to apply a genetic algorithm to a neuronal network which is known as neuroevolution.
-A big advantage of this scheme is that one only needs an indicator how good the neuronal network is given a certain task.
+\section{Problem Overview}
+
+We want to apply a genetic algorithm to a neural network which is known as neuroevolution.
+A big advantage of this scheme is that one only needs an indicator how good the neural network is given a certain task.
 This can for instance be given by the outcome of a game.
-Our game of choice was Blobby Volley 2 which is a simple two-dimensional volleyball game with open source written in C++ with lua support, see Figure \ref{fig:screenshot} (a).
+Our game of choice was Blobby Volley 2 which is a simple two-dimensional volleyball game with open source written in C++ with lua support, see Figure \ref{fig:screenshot}.
 
 \begin{figure}[H]
 \center
-\begin{tabular}{cc}
-\includegraphics[width=0.3\textwidth]{img/screenshot.png}
-&
-\includegraphics[width=0.4\textwidth]{img/fitness.png}
-\\
-(a) & (b)
-\end{tabular}
-\caption{(a) screenshot of the game; (b) fitness density of an example run with indicated minimum, average and maximum}
+\includegraphics[width=0.7\textwidth]{img/screenshot.png}
+\caption{Screenshot of the game.}
 \label{fig:screenshot}
 \end{figure}
 
 A scene from the game could be described by the $x$- and $y$-coordinates of the players and the ball, their corresponding velocities and the current number of ball contacts.
-These arguments or a subset of them could then be used as input for the neuronal network.
+These arguments or a subset of them could then be used as input for the neural network.
 The output would then be the players movement which only consists of going right, left or jumping.
-Assuming the layers of the neuronal network have $n_1,\dots,n_L$ nodes we then have to optimize a function of $\sum_{l=1}^{L-1} (n_l+1)n_{l+1}$ variables if we fix the size of the network.
+Assuming the layers of the neural network have $n_1,\dots,n_L$ nodes we then have to optimize \[N = \sum_{l=1}^{L-1} (n_l+1) \, n_{l+1}\] number of variables if we fix the size of the network.
 
-We have done some tests so far with a basic evolutionary algorithm where we fixed the size of the neuronal network to $6$ input nodes, one hidden layer with $7$ nodes and $2$ output nodes.
+\section*{Preliminary Results}
+
+We have done some tests so far with a basic evolutionary algorithm \cite{github_repo} where we fixed the size of the neural network to $6$ input nodes, one hidden layer with $7$ nodes and $2$ output nodes.
 As crossover we randomly mixed the weights and biases of two networks and chose the parents via the fitness proportional roulette wheel selection.
 Mutation is accomplished by adding Gaussian noise to a subset of the nodes.
 Furthermore we implemented elitism.
 
-Because a random neuronal network has barely a change against the given bots in the game, we implemented our own trainer.
-The trainer is easier to defeat and even gives up after a certain amount of touches with the ball such that normal gameplay will be rewarded.
-This simplification gives the evolutionary algorithm the opportunity to have at least some success rate on which it can hook on.
-The results are depicted in Figure \ref{fig:screenshot} (b), where the fitness is the normalized point difference after $21$ serves.
 
-One can see that, although we we made huge simplifications by weakening the opponent, the algorithm produces a network which wins all balls.
+The representation of the network is accomplished through python objects. This will allow a straightforward implementation of a wide variety of genetic operators, while having next to no impact on the speed of training.
+Evaluation of the population is done in a thread-parallel fashion, allowing us to exploit multiple high core-count machines at our disposal.
 
-We could extend this work by e.g.\,making the size of the network variable or do self-training (maybe with similar techniques as in the paper of Karl Sims which was presented in the lecture)
+We implemented our own very bot to act as an initial trainer for the network. This trainer is easier to defeat and even gives up after a certain amount of touches with the ball such that normal gameplay will be rewarded.
+The simplification gives the evolutionary algorithm the opportunity to start optimizing the neural network in a valid direction, without introducing additional factors to the fitness score.
 
+\begin{figure}[H]
+\center
+\includegraphics[width=0.9\textwidth]{img/fitness.png}
+\caption{Fitness density of an example run with indicated minimum, average and maximum.}
+\label{fig:train}
+\end{figure}
+
+The results are depicted in Figure \ref{fig:train}, where the fitness is the normalized point difference after $21$ serves.
+One can see that, although we we made simplifications by weakening the opponent, the algorithm produces a network which wins all rounds.
+
+\section*{Further Experiments}
+
+We plan on testing multiple types of crossover and mutation operators, and selection schemes as seen in \cite{montana1989training}. Examples mutations include biased and unbiased weight mutations and node mutations. Example crossovers are weight, node, and feature crossovers.
+
+To have a more objective representation of the capabilities of the networks, we plan on reintroducing the original easy, medium and hard difficulty bots in a curriculum-learning fashion.
+
+Finally, as time allows we could extend this work by e.g.\,making the size of the network variable or do self-training with similar techniques as in the paper of Karl Sims\cite{sims1994evolving} presented in the lectures.
+
+\bibliography{refs}{}
+\bibliographystyle{plain}
 
 \end{document}
