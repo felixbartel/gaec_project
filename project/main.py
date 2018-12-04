@@ -19,7 +19,7 @@ mutation_rate = 0.5     # mutation parameters
 mutation_sigma = 0.01
 n_elitism = 10          # keep the best individuals
 
-fig = plt.figure(figsize=(10,5))
+fig = plt.figure(figsize=(10,6))
 pool = BotPool.random(size, N)
 pool.compute_fitness('all')
 fitness = [pool.fitness]

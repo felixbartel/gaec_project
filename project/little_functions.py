@@ -21,13 +21,19 @@ def plot(fig, fitness):
     zi = np.concatenate((zi, np.zeros([1,gen])))
     xi, yi = np.meshgrid(np.arange(0,gen)-0.5, y_grid)
     tmp = ax.pcolor(xi, yi, zi, cmap=plt.cm.Oranges)
-    plt.colorbar(tmp)
+    cb = plt.colorbar(tmp)
+    cb.set_label('% of population')
     tmp.set_clim(vmin=0, vmax=20)
 
     ax.set_xlabel('generation')
     ax.set_ylabel('fitness')
     ax.set_xlim([0,gen-1.5])
     ax.set_ylim([0,1])
+
+    font = {'family' : 'normal',
+            'size'   : 22}
+    plt.rc('font', **font)
+    plt.tight_layout()
 
     plt.show(block=False)
     plt.pause(0.1)
