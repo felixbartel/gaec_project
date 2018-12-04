@@ -43,13 +43,13 @@
 \section{Problem Overview}
 
 We want to apply a genetic algorithm to a neural network which is known as neuroevolution.
-A big advantage of this scheme is that one only needs an indicator how good the neural network is given a certain task.
+A big advantage of this scheme is that one only needs an indicator how good the neural network performs given a certain task.
 This can for instance be given by the outcome of a game.
 Our game of choice was Blobby Volley 2 which is a simple two-dimensional volleyball game with open source written in C++ with lua support, see Figure \ref{fig:screenshot}.
 
 \begin{figure}[H]
 \center
-\includegraphics[width=0.7\textwidth]{img/screenshot.png}
+\includegraphics[width=0.4\textwidth]{img/screenshot.png}
 \caption{Screenshot of the game.}
 \label{fig:screenshot}
 \end{figure}
@@ -62,20 +62,20 @@ Assuming the layers of the neural network have $n_1,\dots,n_L$ nodes we then hav
 \section*{Preliminary Results}
 
 We have done some tests so far with a basic evolutionary algorithm \cite{github_repo} where we fixed the size of the neural network to $6$ input nodes, one hidden layer with $7$ nodes and $2$ output nodes.
-As crossover we randomly mixed the weights and biases of two networks and chose the parents via the fitness proportional roulette wheel selection.
-Mutation is accomplished by adding Gaussian noise to a subset of the nodes.
+As crossover we randomly mixed the nodes with belonging weights and biases of two networks and chose the parents via the fitness proportional roulette wheel selection.
+Mutation is accomplished by adding Gaussian noise to a subset of all weights and biases.
 Furthermore we implemented elitism.
 
 
-The representation of the network is accomplished through python objects. This will allow a straightforward implementation of a wide variety of genetic operators, while having next to no impact on the speed of training.
-Evaluation of the population is done in a thread-parallel fashion, allowing us to exploit multiple high core-count machines at our disposal.
+The genotype-representation of the network is accomplished through python objects. This will allow a straightforward implementation of a wide variety of genetic operators, while having next to no impact on the speed of training.
+As the evaluation of the population is time-consuming, we do this in a thread-parallel fashion, allowing us to exploit multiple high core-count machines at our disposal.
 
 We implemented our own bot to act as an initial trainer for the network. This trainer is easier to defeat and even gives up after a certain amount of touches with the ball such that normal gameplay will be rewarded.
 The simplification gives the evolutionary algorithm the opportunity to start optimizing the neural network in a valid direction, without introducing additional factors to the fitness score.
 
 \begin{figure}[H]
 \center
-\includegraphics[width=0.9\textwidth]{img/fitness.png}
+\includegraphics[width=0.5\textwidth]{img/fitness.png}
 \caption{Fitness density of an example run with indicated minimum, average and maximum.}
 \label{fig:train}
 \end{figure}
@@ -85,11 +85,11 @@ One can see that, although we we made simplifications by weakening the opponent,
 
 \section*{Further Experiments}
 
-We plan on testing multiple types of crossover and mutation operators, and selection schemes as seen in \cite{montana1989training}. Examples mutations include biased and unbiased weight mutations and node mutations. Example crossovers are weight, node, and feature crossovers.
+We plan on testing multiple types of crossover and mutation operators, and selection schemes as seen in \cite{montana1989training}. Example mutations include biased and unbiased weight mutations and node mutations. Example crossovers are weight, node, and feature crossovers.
 
 To have a more objective representation of the capabilities of the networks, we plan on reintroducing the original easy, medium and hard difficulty bots in a curriculum-learning fashion.
 
-Finally, as time allows we could extend this work by e.g.\,making the size of the network variable or do self-training with similar techniques as in the paper of Karl Sims\cite{sims1994evolving} presented in the lectures.
+Finally, as time allows we could extend this work by e.g.\,making the size of the network variable or do self-training with similar techniques as in the paper of Karl Sims\cite{sims1994evolving} presented in the lecture.
 
 \bibliography{refs}{}
 \bibliographystyle{plain}
