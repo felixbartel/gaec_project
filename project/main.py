@@ -1,9 +1,10 @@
 #!/bin/bash
-from bbotpool import *
-from little_functions import *
+from botpool import BotPool
+from little_functions import plot
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+from copy import deepcopy
 
 
 np.random.seed(7)       # because 7 is a lucky number
@@ -38,7 +39,8 @@ for gen in range(maxgen):
     pool = pool[0:N]
     fitness.append(pool.fitness)
 
-    print('generation time: {:1.4f}s/{:1.4f}s'.format(
+    print('Gen {}/{}; time: {:1.4f}s/{:1.4f}s'.format(
+            gen, maxgen,
             fitness_time, time.time() - gen_time))
     plot(fig, fitness)
     pool.max2file()

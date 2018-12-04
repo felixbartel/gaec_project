@@ -6,6 +6,7 @@ import threading
 class BotPool:
     def __init__(self, bbots, fitness):
         self.bbots = bbots
+        # TODO Why do we keeps fitnesses seperately here and in the class?
         self.fitness = fitness
 
     def __len__(self):
@@ -13,7 +14,7 @@ class BotPool:
 
     @staticmethod
     def random(size, N):
-        # creates a uniformly randon bbotpool
+        # creates a uniformly random bbotpool
         bbots = [Bot.random(size, id) for id in range(N)]
         fitness = np.empty(N)
         fitness.fill(np.nan)
@@ -30,9 +31,12 @@ class BotPool:
     def __getitem__(self, key):
         bbots = self.bbots[key]
         fitness = self.fitness[key]
-        for n in range(len(bbots)):
-            bbots[n].id = n
-        return BotPool(bbots, fitness);
+        if hasattr(bbots, "__iter__"):  # Check if we got a list or a single object
+            for n in range(len(bbots)):
+                bbots[n].id = n
+            return BotPool(bbots, fitness)
+        else:
+            return bbots, fitness
 
     def __setitem__(self, key, pool):
         self.bbots[key] = pool.bbots
@@ -45,7 +49,7 @@ class BotPool:
         fitness = np.concatenate((self.fitness,pool.fitness))
         for n in range(len(bbots)):
             bbots[n].id = n
-        return BotPool(bbots, fitness);
+        return BotPool(bbots, fitness)
 
     def compute_fitness(self, mode = 0):
         # computes the fitness of the pool

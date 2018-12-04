@@ -18,17 +18,6 @@ with open('nn_template.lua','r') as f:
 for f in glob.glob("blobby-1.0_fast/data/.blobby/config_*.xml"):
     os.remove(f)
 
-
-def crossover_mix_nodes(bbot1, bbot2, offspring1, offspring2, rate):
-    offspring1.weights = deepcopy(bbot1.weights)
-    offspring2.weights = deepcopy(bbot2.weights)
-    for j in range(bbot1.nlayers-1):
-        for k in range(bbot1.size[j+1]):
-            if np.random.rand() < rate:
-                offspring1.weights[j][k,:] = deepcopy(bbot2.weights[j][k,:])
-                offspring2.weights[j][k,:] = deepcopy(bbot1.weights[j][k,:])
-
-
 class Bot:
     def __init__(self, weights, id):
         self.weights = deepcopy(weights)
