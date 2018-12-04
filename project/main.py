@@ -27,11 +27,6 @@ def compute_fitness(pool, mode=None):
             t.start()
         for t in threads:
             t.join()
-    inverse_fitness_sort(pool)
-
-def write_best(pool):
-    inverse_fitness_sort(pool)
-    pool[0].write_lua('nn_max.lua')
 
 def main():
     # because 7 is a lucky number, our household mathemathican said so
@@ -63,6 +58,8 @@ def main():
         else:
             compute_fitness(pool)
         fitness_time = time.time() - fitness_time
+        inverse_fitness_sort(pool)
+        pool[0].write_lua('nn_max.lua')
         pool = pool[0:N]
         fitness.append(np.array([bot.fitness for bot in pool]))
 
@@ -70,7 +67,6 @@ def main():
                 gen, maxgen,
                 fitness_time, time.time() - gen_time))
         plot(fig, fitness)
-        write_best(pool)
 
     plt.show()
 
