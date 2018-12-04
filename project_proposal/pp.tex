@@ -70,7 +70,7 @@ Furthermore we implemented elitism.
 The representation of the network is accomplished through python objects. This will allow a straightforward implementation of a wide variety of genetic operators, while having next to no impact on the speed of training.
 Evaluation of the population is done in a thread-parallel fashion, allowing us to exploit multiple high core-count machines at our disposal.
 
-We implemented our own bot to act as an initial trainer for the network. This trainer is easier to defeat and even gives up after a certain amount of touches with the ball such that normal gameplay will be rewarded.
+We implemented our own bot to act as an initial trainer for the network. This trainer is easier to defeat and even gives up after a certain amount of touches with the ball, such that normal gameplay will be rewarded.
 The simplification gives the evolutionary algorithm the opportunity to start optimizing the neural network in a valid direction, without introducing additional factors to the fitness score.
 
 \begin{figure}[H]

@@ -60,7 +60,7 @@ class BotPool:
             bbots[n].id = n
         return BotPool(bbots, fitness)
 
-    def compute_fitness(self, mode = 0):
+    def compute_fitness(self, mode=None):
         # computes the fitness of the pool
         if mode == "all":
             idx = range(len(self))
