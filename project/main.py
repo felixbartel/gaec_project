@@ -27,7 +27,7 @@ fitness = [pool.fitness]
 
 for gen in range(maxgen):
     gen_time = time.time()
-    offspring = pool.crossover_rouletta_wheel(N_offspring, p_crossover, crossover_rate)
+    offspring = pool.crossover_roulette_wheel(N_offspring, p_crossover, crossover_rate)
     offspring.mutate_gaussian(p_mutation, mutation_rate, mutation_sigma)
     pool = deepcopy(pool[0:n_elitism]+offspring)
     fitness_time = time.time()

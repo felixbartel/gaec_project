@@ -89,7 +89,7 @@ class BotPool:
         self.sort()
         self.bbots[0].write_lua('nn_max.lua')
 
-    def crossover_rouletta_wheel(self, N, p_crossover, rate):
+    def crossover_roulette_wheel(self, N, p_crossover, rate):
         N = round(N/2)*2
         if np.sum(self.fitness) == 0:
             dist = np.arange(len(self))/len(self) # uniform wheel
