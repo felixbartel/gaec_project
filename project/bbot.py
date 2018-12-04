@@ -7,7 +7,7 @@ from copy import copy, deepcopy
 
 test = False # replace fitness function
 
-# Get a templates once at import
+# Get templates once at import
 with open('blobby-1.0_fast/data/.blobby/config.xml','r') as f:
     config_template = f.read()
 
@@ -87,7 +87,7 @@ class Bot:
                 frob += np.sum(w**2)
             self.fitness = 1/(1+frob)
         else:
-            self.set_bot()
+            self.write_lua()
 
             score = subprocess.run(['./src/blobby', self.config_fname],
                                    stdout=subprocess.PIPE,
@@ -99,26 +99,25 @@ class Bot:
             score_right = int(score[2])
             self.fitness = score_left/(score_left+score_right)
 
-    def set_bot(self, path = 0):
-        if path == 0:
+    def write_lua(self, path = None):
+        if not path: # Works for empty sting, empty list...
             path = self.nn_path
-        W_str = ''
-        W_str += 'W = {'
-        for i in range(self.nlayers-1):
+        W_str = 'W = {'
+        for i in range(self.nlayers - 1):
             W_str += '{'
             for j in range(self.size[i+1]):
                 W_str += '{'
                 for k in range(self.size[i]):
-                    W_str += str(self.weights[i][j,k])
+                    W_str += str(self.weights[i][j, k])
                     if k < self.size[i]-1:
                         W_str += ','
                 W_str += '}'
                 if j < self.size[i+1]:
                     W_str += ','
             W_str += '}'
-            if i < self.nlayers-1:
+            if i < self.nlayers - 1:
                 W_str += ',\n'
         W_str += '}\n'
 
-        with open(path,'w') as f:
+        with open(path, 'w') as f:
             f.write(W_str + nn_template)

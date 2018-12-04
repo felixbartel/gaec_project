@@ -69,14 +69,12 @@ class BotPool:
 
     def sort(self):
         idx = np.argsort(-self.fitness)
-        bbots = [self.bbots[j] for j in idx]
-        fitness = self.fitness[idx]
-        self.bbots = bbots
-        self.fitness = fitness
+        self.bbots = [self.bbots[i] for i in idx]
+        self.fitness = self.fitness[idx]
 
     def max2file(self):
         self.sort()
-        self.bbots[0].set_bot('nn_max.lua')
+        self.bbots[0].write_lua('nn_max.lua')
 
     def crossover_rouletta_wheel(self, N, p_crossover, rate):
         N = round(N/2)*2
