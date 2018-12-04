@@ -21,24 +21,7 @@ for f in glob.glob("blobby-1.0_fast/data/.blobby/config_*.xml"):
 class Bot:
     def __init__(self, weights, id):
         self.weights = deepcopy(weights)
-        self.id = id
         self.fitness = -np.inf
-
-    @property
-    def id(self):
-        return self._id
-
-    @id.setter
-    def id(self, id):
-        self._id = id
-        self.config_fname = 'config_{:04d}.xml'.format(id)
-        self.config_path = 'blobby-1.0_fast/data/.blobby/' + self.config_fname
-        self.nn_path = 'blobby-1.0_fast/data/.blobby/scripts/nn_{:04d}.lua'.format(id)
-        self.config_string = config_template.replace('<var name="left_script_name" value="nn"/>',
-                                                     '<var name="left_script_name" value="nn_{:04d}"/>'.format(self.id))
-        if not os.path.isfile(self.config_path):
-            with open(self.config_path, 'w') as f:
-                f.write(self.config_string)
 
     @property
     def size(self):
@@ -69,7 +52,7 @@ class Bot:
             mask = np.less(np.random.random_sample(self.weights[j].shape), rate)
             self.weights[j] += sigma*mask*np.random.randn(self.weights[j].shape[0],self.weights[j].shape[1])
 
-    def compute_fitness(self):
+    def compute_fitness(self, id):
         if test:
             # sum over squared frobenius norms of the weight matrices
             frob = 0
@@ -77,6 +60,7 @@ class Bot:
                 frob += np.sum(w**2)
             self.fitness = 1/(1+frob)
         else:
+            self.write_config(id)
             self.write_lua()
 
             score = subprocess.run(['./src/blobby', self.config_fname],
@@ -88,6 +72,16 @@ class Bot:
             score_left = int(score[1])
             score_right = int(score[2])
             self.fitness = score_left/(score_left+score_right)
+
+    def write_config(self, id):
+        self.config_fname = 'config_{:04d}.xml'.format(id)
+        self.config_path = 'blobby-1.0_fast/data/.blobby/' + self.config_fname
+        self.nn_path = 'blobby-1.0_fast/data/.blobby/scripts/nn_{:04d}.lua'.format(id)
+        self.config_string = config_template.replace('<var name="left_script_name" value="nn"/>',
+                                                     '<var name="left_script_name" value="nn_{:04d}"/>'.format(id))
+        if not os.path.isfile(self.config_path):
+            with open(self.config_path, 'w') as f:
+                f.write(self.config_string)
 
     def write_lua(self, path = None):
         if not path: # Works for empty sting, empty list...

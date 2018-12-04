@@ -61,7 +61,7 @@ class BotPool:
         chunks = np.array_split(bbots, round(len(bbots)/thread_count))
 
         for chunk in chunks:
-            threads = [threading.Thread(target=bot.compute_fitness) for bot in chunk]
+            threads = [threading.Thread(target=bot.compute_fitness, kwargs={'id':id}) for id, bot in enumerate(chunk)]
             for t in threads:
                 t.start()
             for t in threads:
