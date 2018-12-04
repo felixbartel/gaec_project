@@ -3,7 +3,7 @@ import numpy as np
 import threading
 
 
-class BBOTPOOL:
+class BotPool:
     def __init__(self, bbots, fitness):
         self.bbots = bbots
         self.fitness = fitness
@@ -14,25 +14,25 @@ class BBOTPOOL:
     @staticmethod
     def random(size, N):
         # creates a uniformly randon bbotpool
-        bbots = [BBOT.random(size, id) for id in range(N)]
+        bbots = [Bot.random(size, id) for id in range(N)]
         fitness = np.empty(N)
         fitness.fill(np.nan)
-        return BBOTPOOL(bbots, fitness)
+        return BotPool(bbots, fitness)
 
     @staticmethod
     def zeros(N):
         # creates an empty bbotpool
-        bbots = [BBOT(0, id) for id in range(N)]
+        bbots = [Bot(0, id) for id in range(N)]
         fitness = np.empty(N)
         fitness.fill(np.nan)
-        return BBOTPOOL(bbots, fitness)
+        return BotPool(bbots, fitness)
 
     def __getitem__(self, key):
         bbots = self.bbots[key]
         fitness = self.fitness[key]
         for n in range(len(bbots)):
             bbots[n].id = n
-        return BBOTPOOL(bbots, fitness);
+        return BotPool(bbots, fitness);
 
     def __setitem__(self, key, pool):
         self.bbots[key] = pool.bbots
@@ -45,7 +45,7 @@ class BBOTPOOL:
         fitness = np.concatenate((self.fitness,pool.fitness))
         for n in range(len(bbots)):
             bbots[n].id = n
-        return BBOTPOOL(bbots, fitness);
+        return BotPool(bbots, fitness);
 
     def compute_fitness(self, mode = 0):
         # computes the fitness of the pool
@@ -93,7 +93,7 @@ class BBOTPOOL:
                     idx.append(n)
                     break
 
-        offspring = BBOTPOOL.zeros(N)
+        offspring = BotPool.zeros(N)
         for n in range(int(N/2)):
             if np.random.rand() < p_crossover:
                 crossover_mix_nodes(self.bbots[idx[2*n]], self.bbots[idx[2*n+1]], offspring.bbots[2*n], offspring.bbots[2*n+1], rate)

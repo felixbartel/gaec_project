@@ -29,7 +29,7 @@ def crossover_mix_nodes(bbot1, bbot2, offspring1, offspring2, rate):
                 offspring2.weights[j][k,:] = deepcopy(bbot1.weights[j][k,:])
 
 
-class BBOT:
+class Bot:
     def __init__(self, weights, id):
         self.weights = deepcopy(weights)
         self.id = id
@@ -71,7 +71,7 @@ class BBOT:
         weights = []
         for j in range(len(size)-1):
             weights.append(np.random.rand(size[j+1], size[j]+1)-0.5)
-        return BBOT(weights, id)
+        return Bot(weights, id)
 
     def mutate_gaussian(self, rate, sigma):
         # adds Gaussian noise with deviation sigma to rate weights (0.5 for half of them)
