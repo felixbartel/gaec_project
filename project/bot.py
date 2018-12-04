@@ -22,7 +22,7 @@ class Bot:
     def __init__(self, weights, id):
         self.weights = deepcopy(weights)
         self.id = id
-        self.fitness = np.nan
+        self.fitness = -np.inf
 
     @property
     def id(self):
@@ -63,6 +63,7 @@ class Bot:
         return Bot(weights, id)
 
     def mutate_gaussian(self, rate, sigma):
+        self.fitness = -np.inf
         # adds Gaussian noise with deviation sigma to rate weights (0.5 for half of them)
         for j in range(self.nlayers-1):
             mask = np.less(np.random.random_sample(self.weights[j].shape), rate)

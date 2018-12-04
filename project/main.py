@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import time
 from copy import deepcopy
 
-
-np.random.seed(7)       # because 7 is a lucky number
+# because 7 is a lucky number, our household mathemathican said so
+np.random.seed(7)       
 size = [6, 7, 2]        # size of the neuronal networks
 N = 100                 # population size
 maxgen = 100            # maximal number of generation
@@ -22,8 +22,7 @@ n_elitism = 10          # keep the best individuals
 fig = plt.figure(figsize=(10,6))
 pool = BotPool.random(size, N)
 pool.compute_fitness('all')
-fitness = [pool.fitness]
-
+fitness = [np.array([bot.fitness for bot in pool.bbots])]
 
 for gen in range(maxgen):
     gen_time = time.time()
@@ -37,7 +36,7 @@ for gen in range(maxgen):
         pool.compute_fitness()
     fitness_time = time.time() - fitness_time
     pool = pool[0:N]
-    fitness.append(pool.fitness)
+    fitness.append(np.array([bot.fitness for bot in pool.bbots]))
 
     print('Gen {}/{}; time: {:1.4f}s/{:1.4f}s'.format(
             gen, maxgen,
