@@ -19,7 +19,7 @@ for f in glob.glob("blobby-1.0_fast/data/.blobby/config_*.xml"):
     os.remove(f)
 
 class Bot:
-    def __init__(self, weights, id):
+    def __init__(self, weights):
         self.weights = deepcopy(weights)
         self.fitness = -np.inf
 
@@ -38,12 +38,12 @@ class Bot:
         return len(self.size)
 
     @staticmethod
-    def random(size, id):
+    def random(size):
         # creates a uniformly randon bbot
         weights = []
         for j in range(len(size)-1):
             weights.append(np.random.rand(size[j+1], size[j]+1)-0.5)
-        return Bot(weights, id)
+        return Bot(weights)
 
     def mutate_gaussian(self, rate, sigma):
         self.fitness = -np.inf
