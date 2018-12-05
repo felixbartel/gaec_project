@@ -34,7 +34,7 @@ def crossover_roulette_wheel(bots, N, p_crossover, rate):
             offsprings.extend([Bot(None), Bot(None)])
             crossover_mix_nodes(bots[idx[2*n]], bots[idx[2*n+1]], offsprings[-2], offsprings[-1], rate)
         else:
-            offsprings.extend([bots[idx[2*n]], bots[idx[2*n+1]]])
+            offsprings.extend([deepcopy(bots[idx[2*n]]), deepcopy(bots[idx[2*n+1]])])
 
     return offsprings
 
