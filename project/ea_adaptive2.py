@@ -18,7 +18,7 @@ def compute_fitness(pool, mode=None):
         subpool = pool
     else: # don't compute fitnesses we already know
         subpool = [bot for bot in pool if bot.fitness == -np.inf]
-    thread_count = 50 # maximal parallel threads
+    thread_count = 100 # maximal parallel threads
     chunks = np.array_split(subpool, math.ceil(len(subpool)/thread_count))
 
     for chunk in chunks:
@@ -37,25 +37,23 @@ def main():
     np.random.seed(7)
     size = [6, 7, 2]        # size of the neuronal networks
     N = 100                 # population size
-    maxgen = 100            # maximal number of generation
+    maxgen = 200            # maximal number of generation
     n_offspring = 150
     crossover_p = 0.9       # crossove parameters
-    crossover_rate = 0.5
-    mutation_p = 0.5
-    mutation_rate = 0.5     # mutation parameters
-    mutation_sigma = 0.01
-    n_elitism = 10          # keep the best individuals
+    crossover_rate = 0.4
+    fbar = lambda x: (x+0.3)**3
+    mutation_p = 0.9
+    n_elitism = 2           # keep the best individuals
 
-    pool = [Bot.random(size) for _ in range(N)]
+    pool = [Bot.random(size, 'self_adapt2') for _ in range(N)]
     compute_fitness(pool, 'all')
     inverse_fitness_sort(pool)
     fitness = [np.array([bot.fitness for bot in pool])]
 
     for gen in range(maxgen+1):
         gen_time = time.time()
-        offspring = crossover_roulette_wheel(pool, n_offspring, crossover_p, crossover_rate)
-#        mutate_gaussian(offspring, mutation_p, mutation_rate, mutation_sigma)
-        mutate_gaussian(offspring, 'self_adapt')
+        offspring = crossover_roulette_wheel(pool, n_offspring, crossover_p, crossover_rate, fbar)
+        mutate_gaussian(offspring, mutation_p)
         pool = pool[0:n_elitism] + offspring
         fitness_time = time.time()
         if gen%5 == 0:
@@ -74,8 +72,8 @@ def main():
                 np.min(fitness[gen]),
                 np.mean(fitness[gen]),
                 np.max(fitness[gen])))
+        save_fitness(fitness)
 
-    save_fitness(fitness)
 
 if __name__ == '__main__':
     main()

@@ -19,12 +19,9 @@ for f in glob.glob("blobby-1.0_fast/data/.blobby/config_*.xml"):
     os.remove(f)
 
 class Bot:
-    def __init__(self, weights, mutation_p, mutation_rate, mutation_sigma):
+    def __init__(self, weights):
         self.weights        = deepcopy(weights)
         self.fitness        = -np.inf
-        self.mutation_p     = mutation_p
-        self.mutation_rate  = mutation_rate
-        self.mutation_sigma = mutation_sigma
 
     @property
     def size(self):
@@ -41,32 +38,42 @@ class Bot:
         return len(self.size)
 
     @staticmethod
-    def random(size):
+    def random(size, mode = None):
         # creates a uniformly random bbot
         weights = []
         for j in range(len(size)-1):
             weights.append(np.random.rand(size[j+1], size[j]+1)-0.5)
-        mutation_p = np.random.rand()
-        mutation_rate = np.random.rand()
-        mutation_sigma = 0.02*np.random.rand()
-        return Bot(weights, mutation_p, mutation_rate, mutation_sigma)
+        bbot = Bot(weights)
+        bbot.mode = mode
+        if mode == 'self_adapt1':
+            bbot.mutation_rate = np.random.rand()/2
+            bbot.mutation_sigma = 0.05*np.random.rand()
+        if mode == 'self_adapt2':
+            bbot.mutation_sigma = []
+            for j in range(len(size)-1):
+                bbot.mutation_sigma.append(0.05*np.random.randn(size[j+1], size[j]+1))
+
+        return bbot
 
     def mutate_gaussian(self, *args):
         self.fitness = -np.inf
         # adds Gaussian noise with deviation sigma to rate weights (0.5 for half of them)
-        if args[0] == 'self_adapt':
-            self.mutation_p += 0.1*np.random.randn()
-            self.mutation_rate += 0.1*np.random.randn()
-            self.mutation_sigma += 0.01*np.random.randn()
-            rate = self.mutation_rate
-            sigma = self.mutation_rate
+        if self.mode == 'self_adapt1':
+            self.mutation_sigma *= np.exp(0.05*np.random.randn())
+            self.mutation_rate *= np.exp(0.1*np.random.randn())
+            for j in range(self.nlayers-1):
+                mask = np.less(np.random.random_sample(self.weights[j].shape), self.mutation_rate)
+                self.weights[j] += self.mutation_sigma*mask*np.random.randn(self.size[j+1], self.size[j]+1)
+        elif self.mode == 'self_adapt2':
+            for j in range(self.nlayers-1):
+                self.mutation_sigma[j] *= np.exp(0.05*np.random.randn(self.size[j+1], self.size[j]+1))
+                self.weights[j] += self.mutation_sigma[j]*np.random.randn(self.size[j+1], self.size[j]+1)
         else:
             rate = args[0]
             sigma = args[1]
-
-        for j in range(self.nlayers-1):
-            mask = np.less(np.random.random_sample(self.weights[j].shape), rate)
-            self.weights[j] += sigma*mask*np.random.randn(self.size[j+1],self.size[j]+1)
+            for j in range(self.nlayers-1):
+                mask = np.less(np.random.random_sample(self.weights[j].shape), rate)
+                self.weights[j] += sigma*mask*np.random.randn(self.size[j+1], self.size[j]+1)
 
     def compute_fitness(self, id):
         if test:
