@@ -67,7 +67,7 @@ def main():
         pool = pool[0:N]
         fitness.append(np.array([bot.fitness for bot in pool]))
 
-        print('Gen {}/{}; time: {:1.4f}s/{:1.4f}s; min: {:1.4f}; mean: {:1.4f}; max: {:1.4f}'.format(
+        print('Gen {}/{}; \ttime: {:1.4f}s/{:1.4f}s; \tmin = {:1.4f}; \tmean = {:1.4f}; \tmax = {:1.4f}'.format(
                 gen, maxgen,
                 fitness_time, time.time() - gen_time,
                 np.min(fitness[gen]),
