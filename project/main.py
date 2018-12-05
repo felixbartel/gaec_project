@@ -39,9 +39,9 @@ def main():
     N = 100                 # population size
     maxgen = 100            # maximal number of generation
     n_offspring = 150
-    p_crossover = 0.9       # crossove parameters
+    crossover_p = 0.9       # crossove parameters
     crossover_rate = 0.5
-    p_mutation = 0.5
+    mutation_p = 0.5
     mutation_rate = 0.5     # mutation parameters
     mutation_sigma = 0.01
     n_elitism = 10          # keep the best individuals
@@ -53,8 +53,9 @@ def main():
 
     for gen in range(maxgen+1):
         gen_time = time.time()
-        offspring = crossover_roulette_wheel(pool, n_offspring, p_crossover, crossover_rate)
-        mutate_gaussian(offspring, p_mutation, mutation_rate, mutation_sigma)
+        offspring = crossover_roulette_wheel(pool, n_offspring, crossover_p, crossover_rate)
+#        mutate_gaussian(offspring, mutation_p, mutation_rate, mutation_sigma)
+        mutate_gaussian(offspring, 'self_adapt')
         pool = pool[0:n_elitism] + offspring
         fitness_time = time.time()
         if gen%5 == 0:

@@ -19,9 +19,12 @@ for f in glob.glob("blobby-1.0_fast/data/.blobby/config_*.xml"):
     os.remove(f)
 
 class Bot:
-    def __init__(self, weights):
-        self.weights = deepcopy(weights)
-        self.fitness = -np.inf
+    def __init__(self, weights, mutation_p, mutation_rate, mutation_sigma):
+        self.weights        = deepcopy(weights)
+        self.fitness        = -np.inf
+        self.mutation_p     = mutation_p
+        self.mutation_rate  = mutation_rate
+        self.mutation_sigma = mutation_sigma
 
     @property
     def size(self):
@@ -43,11 +46,24 @@ class Bot:
         weights = []
         for j in range(len(size)-1):
             weights.append(np.random.rand(size[j+1], size[j]+1)-0.5)
-        return Bot(weights)
+        mutation_p = np.random.rand()
+        mutation_rate = np.random.rand()
+        mutation_sigma = 0.05*np.random.rand()
+        return Bot(weights, mutation_p, mutation_rate, mutation_sigma)
 
-    def mutate_gaussian(self, rate, sigma):
+    def mutate_gaussian(self, *args):
         self.fitness = -np.inf
         # adds Gaussian noise with deviation sigma to rate weights (0.5 for half of them)
+        if args[0] == 'self_adapt':
+            self.mutation_p += 0.1*np.random.randn()
+            self.mutation_rate += 0.1*np.random.randn()
+            self.mutation_sigma += 0.01*np.random.randn()
+            rate = self.mutation_rate
+            sigma = self.mutation_rate
+        else:
+            rate = args[0]
+            sigma = args[1]
+
         for j in range(self.nlayers-1):
             mask = np.less(np.random.random_sample(self.weights[j].shape), rate)
             self.weights[j] += sigma*mask*np.random.randn(self.size[j+1],self.size[j]+1)
