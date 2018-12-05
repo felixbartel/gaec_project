@@ -1,5 +1,4 @@
 #!/bin/bash
-from little_functions import plot
 import numpy as np
 import matplotlib.pyplot as plt
 import time
@@ -8,6 +7,7 @@ import threading
 from genetic_operators import crossover_roulette_wheel, mutate_gaussian
 from bot import Bot
 import math
+import pickle
 
 def inverse_fitness_sort(pool):
     pool.sort(key=lambda bot: -bot.fitness)
@@ -28,6 +28,10 @@ def compute_fitness(pool, mode=None):
         for t in threads:
             t.join()
 
+def save_fitness(fitness):
+    with open('fitness.pkl', 'wb') as f:
+        pickle.dump(fitness, f)
+
 def main():
     # because 7 is a lucky number, our household mathemathican said so
     np.random.seed(7)
@@ -42,13 +46,12 @@ def main():
     mutation_sigma = 0.01
     n_elitism = 10          # keep the best individuals
 
-    fig = plt.figure(figsize=(10,6))
     pool = [Bot.random(size) for _ in range(N)]
     compute_fitness(pool, 'all')
     inverse_fitness_sort(pool)
     fitness = [np.array([bot.fitness for bot in pool])]
 
-    for gen in range(maxgen):
+    for gen in range(maxgen+1):
         gen_time = time.time()
         offspring = crossover_roulette_wheel(pool, n_offspring, p_crossover, crossover_rate)
         mutate_gaussian(offspring, p_mutation, mutation_rate, mutation_sigma)
@@ -64,12 +67,14 @@ def main():
         pool = pool[0:N]
         fitness.append(np.array([bot.fitness for bot in pool]))
 
-        print('Gen {}/{}; time: {:1.4f}s/{:1.4f}s'.format(
+        print('Gen {}/{}; time: {:1.4f}s/{:1.4f}s; min: {:1.4f}; mean: {:1.4f}; max: {:1.4f}'.format(
                 gen, maxgen,
-                fitness_time, time.time() - gen_time))
-        plot(fig, fitness)
+                fitness_time, time.time() - gen_time,
+                np.min(fitness[gen]),
+                np.mean(fitness[gen]),
+                np.max(fitness[gen])))
 
-    plt.show()
+    save_fitness(fitness)
 
 if __name__ == '__main__':
     main()
