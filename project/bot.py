@@ -25,7 +25,7 @@ class Bot:
 
     @property
     def size(self):
-        # returns the size of the neuronal network
+        # returns the size of the neural network
         size = []
         for w in self.weights:
             size.append(np.shape(w)[1]-1)
@@ -39,7 +39,7 @@ class Bot:
 
     @staticmethod
     def random(size):
-        # creates a uniformly randon bbot
+        # creates a uniformly random bbot
         weights = []
         for j in range(len(size)-1):
             weights.append(np.random.rand(size[j+1], size[j]+1)-0.5)
@@ -50,7 +50,7 @@ class Bot:
         # adds Gaussian noise with deviation sigma to rate weights (0.5 for half of them)
         for j in range(self.nlayers-1):
             mask = np.less(np.random.random_sample(self.weights[j].shape), rate)
-            self.weights[j] += sigma*mask*np.random.randn(self.weights[j].shape[0],self.weights[j].shape[1])
+            self.weights[j] += sigma*mask*np.random.randn(self.size[j+1],self.size[j]+1)
 
     def compute_fitness(self, id):
         if test:
