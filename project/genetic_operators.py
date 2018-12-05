@@ -6,11 +6,11 @@ def crossover_mix_nodes(bbot1, bbot2, rate):
     offspring1 = deepcopy(bbot1)
     offspring2 = deepcopy(bbot2)
     offspring1.mutation_p = (1-rate)*bbot1.mutation_p+rate*bbot2.mutation_p
-    offspring1.mutation_rate = (1-rate)*bbot1.mutation_p+rate*bbot2.mutation_p
-    offspring1.mutation_sigma = (1-rate)*bbot1.mutation_p+rate*bbot2.mutation_p
     offspring2.mutation_p = (1-rate)*bbot2.mutation_p+rate*bbot1.mutation_p
-    offspring2.mutation_rate = (1-rate)*bbot2.mutation_p+rate*bbot1.mutation_p
-    offspring2.mutation_sigma = (1-rate)*bbot2.mutation_p+rate*bbot1.mutation_p
+    offspring1.mutation_rate = (1-rate)*bbot1.mutation_rate+rate*bbot2.mutation_rate
+    offspring2.mutation_rate = (1-rate)*bbot2.mutation_rate+rate*bbot1.mutation_rate
+    offspring1.mutation_sigma = (1-rate)*bbot1.mutation_sigma+rate*bbot2.mutation_sigma
+    offspring2.mutation_sigma = (1-rate)*bbot2.mutation_sigma+rate*bbot1.mutation_sigma
     for j in range(bbot1.nlayers-1):
         for k in range(bbot1.size[j+1]):
             if np.random.rand() < rate:

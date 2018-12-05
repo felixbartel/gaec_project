@@ -48,7 +48,7 @@ class Bot:
             weights.append(np.random.rand(size[j+1], size[j]+1)-0.5)
         mutation_p = np.random.rand()
         mutation_rate = np.random.rand()
-        mutation_sigma = 0.05*np.random.rand()
+        mutation_sigma = 0.02*np.random.rand()
         return Bot(weights, mutation_p, mutation_rate, mutation_sigma)
 
     def mutate_gaussian(self, *args):
