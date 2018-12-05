@@ -45,6 +45,7 @@ def main():
     fig = plt.figure(figsize=(10,6))
     pool = [Bot.random(size) for _ in range(N)]
     compute_fitness(pool, 'all')
+    inverse_fitness_sort(pool)
     fitness = [np.array([bot.fitness for bot in pool])]
 
     for gen in range(maxgen):
