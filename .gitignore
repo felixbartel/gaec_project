@@ -19,3 +19,4 @@ project_proposal/*.pdf
 project_proposal/*.gz
 project_proposal/*.bbl
 project_proposal/*.blg
+*.pkl
