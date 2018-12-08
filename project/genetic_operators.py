@@ -1,5 +1,5 @@
 from copy import deepcopy
-from bot import Bot
+from bot import Bot, BotSelfAdapt1, BotSelfAdapt2
 import numpy as np
 
 def crossover_mix_nodes(bbot1, bbot2, rate):
@@ -7,10 +7,10 @@ def crossover_mix_nodes(bbot1, bbot2, rate):
     offspring2 = deepcopy(bbot2)
     offspring1.fitness = -np.inf
     offspring2.fitness = -np.inf
-    if bbot1.mode == 'self_adapt1':
+    if type(bbot1) == BotSelfAdapt1:
         [offspring1.mutation_rate, offspring1.mutation_sigma] = (1-rate)*np.array([bbot1.mutation_rate, bbot1.mutation_sigma])+rate*np.array([bbot2.mutation_rate, bbot2.mutation_sigma])
         [offspring2.mutation_rate, offspring2.mutation_sigma] = (1-rate)*np.array([bbot2.mutation_rate, bbot2.mutation_sigma])+rate*np.array([bbot1.mutation_rate, bbot1.mutation_sigma])
-    if bbot1.mode == 'self_adapt2':
+    elif type(bbot1) == BotSelfAdapt2:
         offspring1.mutation_sigma = []
         offspring2.mutation_sigma = []
         for s1, s2 in zip(bbot1.mutation_sigma, bbot2.mutation_sigma):
@@ -48,14 +48,7 @@ def crossover_roulette_wheel(bots, N, crossover_p, rate, fbar):
 
     return offsprings
 
-def mutate_gaussian(bots, mutation_p, *args):
-    if bots[0].mode == 'self_adapt1' or bots[0].mode == 'self_adapt2':
-        for n in range(len(bots)):
-            if np.random.rand() < mutation_p:
-                bots[n].mutate_gaussian()
-    else:
-        rate = args[0]
-        sigma = args[1]
-        for n in range(len(bots)):
-            if np.random.rand() < mutation_p:
-                bots[n].mutate_gaussian(rate, sigma)
+def mutate_gaussian(bots, mutation_p, rate, sigma):
+    for n in range(len(bots)):
+        if np.random.rand() < mutation_p:
+            bots[n].mutate_gaussian(rate, sigma)
