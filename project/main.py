@@ -59,14 +59,14 @@ def main():
     n_elitism = 10          # keep the best individuals
 
     if args.self_adapt_1:
-        bot_class = BotSelfAdapt1
         print('Using self adapt type 1')
+        bot_class = BotSelfAdapt1
     elif args.self_adapt_2:
-        bot_class = BotSelfAdapt2
         print('Using self adapt type 2')
+        bot_class = BotSelfAdapt2
     else:
-        bot_class = Bot
         print('Using no self adaption')
+        bot_class = Bot
 
     def fbar(x):
         return (x + 1)**2
@@ -93,7 +93,7 @@ def main():
         pool = pool[0:N]
         fitness.append(np.array([bot.fitness for bot in pool]))
 
-        print('Gen {}/{}; \ttime: {:1.4f}s/{:1.4f}s; \tmin = {:1.4f}; \tmean = {:1.4f}; \tmax = {:1.4f}'.format(
+        print('Gen {}/{}; \ttime: {:2.4f}s/{:2.4f}s; \tmin = {:1.4f}; \tmean = {:1.4f}; \tmax = {:1.4f}'.format(
             gen, maxgen,
             fitness_time, time.time() - gen_time,
             np.min(fitness[gen]),
