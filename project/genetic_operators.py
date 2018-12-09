@@ -48,12 +48,14 @@ def crossover_roulette_wheel(bots, N, crossover_p, rate, fbar):
 
     return offsprings
 
-def mutate_gaussian(bots, mutation_p, rate, sigma):
-    for n in range(len(bots)):
-        if np.random.rand() < mutation_p:
-            bots[n].mutate_gaussian(rate, sigma)
-
-def mutate_gaussian(bots, mutation_p):
-    for n in range(len(bots)):
-        if np.random.rand() < mutation_p:
-            bots[n].mutate_gaussian()
+def mutate_gaussian(bots, mutation_p, *args):
+    if args:
+        rate = args[0]
+        sigma = args[1]
+        for n in range(len(bots)):
+            if np.random.rand() < mutation_p:
+                bots[n].mutate_gaussian(rate, sigma)
+    else:
+        for n in range(len(bots)):
+            if np.random.rand() < mutation_p:
+                bots[n].mutate_gaussian()
