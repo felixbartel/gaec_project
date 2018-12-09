@@ -1,8 +1,13 @@
+import argparse
 import matplotlib.pyplot as plt
 import numpy as np
 import pickle
 
-with open('fitness.pkl', 'rb') as f:
+parser = argparse.ArgumentParser()
+parser.add_argument('filename', nargs = '?', default = 'fitness.pkl')
+args = parser.parse_args()
+
+with open(args.filename, 'rb') as f:
     fitness = pickle.load(f)
 
 gen = len(fitness)
