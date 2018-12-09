@@ -49,27 +49,35 @@ def main():
     np.random.seed(7)
     size = [6, 7, 2]        # size of the neuronal networks
     N = 100                 # population size
-    maxgen = 100            # maximal number of generation
     n_offspring = 150
     crossover_p = 0.9       # crossove parameters
     crossover_rate = 0.5
-    mutation_p = 0.5        # mutation parameters
-    mutation_rate = 0.5
-    mutation_sigma = 0.01
-    n_elitism = 10          # keep the best individuals
+    mutation_p = 0.7        # mutation parameters
 
     if args.self_adapt_1:
         print('Using self adapt type 1')
         bot_class = BotSelfAdapt1
+        maxgen = 200            # maximal number of generation
+        n_elitism = 1
+        def fbar(x):
+            return (x + 0.2)**3
     elif args.self_adapt_2:
         print('Using self adapt type 2')
         bot_class = BotSelfAdapt2
+        maxgen = 200            # maximal number of generation
+        n_elitism = 1
+        def fbar(x):
+            return (x + 0.2)**3
     else:
         print('Using no self adaption')
         bot_class = Bot
+        maxgen = 100            # maximal number of generation
+        mutation_rate = 0.5
+        mutation_sigma = 0.01
+        n_elitism = 10
+        def fbar(x):
+            return (x + 1)**2
 
-    def fbar(x):
-        return (x + 1)**2
 
     pool = [bot_class.random(size) for _ in range(N)]
     compute_fitness(pool, 'all')
@@ -80,7 +88,10 @@ def main():
         gen_time = time.time()
         offspring = crossover_roulette_wheel(
             pool, n_offspring, crossover_p, crossover_rate, fbar)
-        mutate_gaussian(offspring, mutation_p, mutation_rate, mutation_sigma)
+        if args.self_adapt_1 or args.self_adapt_2:
+            mutate_gaussian(offspring, mutation_p)
+        else:
+            mutate_gaussian(offspring, mutation_p, mutation_rate, mutation_sigma)
         pool = pool[0:n_elitism] + offspring
         fitness_time = time.time()
         if gen % 5 == 0:

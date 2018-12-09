@@ -125,15 +125,15 @@ class BotSelfAdapt1(Bot):
         # creates a uniformly random bbot
         bbot = super().random(size)
 
-        bbot.mutation_rate = np.random.rand() / 2
-        bbot.mutation_sigma = 0.05 * np.random.rand()
+        bbot.mutation_rate = np.random.rand() / 2 + 0.25
+        bbot.mutation_sigma = 0.03 * np.random.rand()
 
         return bbot
 
-    def mutate_gaussian(self, rate, sigma):
+    def mutate_gaussian(self):
         self.fitness = -np.inf
-        self.mutation_sigma *= np.exp(0.05 * np.random.randn())
-        self.mutation_rate *= np.exp(0.1 * np.random.randn())
+        self.mutation_sigma *= np.exp(0.4 * np.random.randn())
+        self.mutation_rate *= np.exp(0.4 * np.random.randn())
         for j in range(self.nlayers - 1):
             mask = np.less(np.random.random_sample(
                 self.weights[j].shape), self.mutation_rate)
@@ -151,14 +151,14 @@ class BotSelfAdapt2(Bot):
         bbot = super().random(size)
 
         bbot.mutation_sigma = [
-            0.05 * np.random.randn(size[j + 1], size[j] + 1) for j in range(len(size) - 1)]
+            0.02 * np.random.rand(size[j + 1], size[j] + 1) for j in range(len(size) - 1)]
 
         return bbot
 
-    def mutate_gaussian(self, rate, sigma):
+    def mutate_gaussian(self):
         self.fitness = -np.inf
         for j in range(self.nlayers - 1):
             self.mutation_sigma[j] *= np.exp(
-                0.05 * np.random.randn(self.size[j + 1], self.size[j] + 1))
+                0.4 * np.random.randn(self.size[j + 1], self.size[j] + 1))
             self.weights[j] += self.mutation_sigma[j] * \
                 np.random.randn(self.size[j + 1], self.size[j] + 1)

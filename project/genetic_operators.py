@@ -52,3 +52,8 @@ def mutate_gaussian(bots, mutation_p, rate, sigma):
     for n in range(len(bots)):
         if np.random.rand() < mutation_p:
             bots[n].mutate_gaussian(rate, sigma)
+
+def mutate_gaussian(bots, mutation_p):
+    for n in range(len(bots)):
+        if np.random.rand() < mutation_p:
+            bots[n].mutate_gaussian()
