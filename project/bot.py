@@ -20,9 +20,10 @@ for f in glob.glob("blobby-1.0_fast/data/.blobby/config_*.xml"):
 
 
 class Bot:
-    def __init__(self, weights):
+    def __init__(self, weights, trainer = "trainer"):
         self.weights = deepcopy(weights)
         self.fitness = -np.inf
+        self.trainer = trainer
 
     @property
     def size(self):
@@ -84,11 +85,12 @@ class Bot:
         self.config_path = 'blobby-1.0_fast/data/.blobby/' + self.config_fname
         self.nn_path = 'blobby-1.0_fast/data/.blobby/scripts/nn_{:04d}.lua'.format(
             id)
-        self.config_string = config_template.replace('<var name="left_script_name" value="nn"/>',
+        self.config_string = config_template.replace('<var name="left_script_name" value=""/>',
                                                      '<var name="left_script_name" value="nn_{:04d}"/>'.format(id))
-        if not os.path.isfile(self.config_path):
-            with open(self.config_path, 'w') as f:
-                f.write(self.config_string)
+        self.config_string = self.config_string.replace('<var name="right_script_name" value=""/>',
+                                                     '<var name="right_script_name" value="{:s}"/>'.format(self.trainer))
+        with open(self.config_path, 'w') as f:
+            f.write(self.config_string)
 
     def write_lua(self, path=None):
         if not path:  # Works for empty sting, empty list...

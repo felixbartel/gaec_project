@@ -28,7 +28,7 @@ def crossover_roulette_wheel(bots, N, crossover_p, rate, fbar):
     N = round(N/2)*2
     fitnesses = np.array([bot.fitness for bot in bots])
     if np.sum(fitnesses) == 0:
-        dist = np.arange(len(bots))/len(bots) # uniform wheel
+        dist = (np.arange(len(bots))+1)/len(bots) # uniform wheel
     else:
         dist = np.cumsum(fbar(fitnesses)/np.sum(fbar(fitnesses)))
 
