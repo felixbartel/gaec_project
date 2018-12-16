@@ -1,3 +1,4 @@
+maxtouches = 5
 ntouches = 0
 oldtouches = 0
 
@@ -23,7 +24,7 @@ function OnServe(ballready)
 end
 
 function OnGame()
-  if ntouches < 5 then
+  if ntouches < maxtouches then
     if touches() ~= 0 and touches() ~= oldtouches then
       ntouches = ntouches+1
       oldtouches = touches()
