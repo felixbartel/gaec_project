@@ -54,16 +54,29 @@ def main():
     crossover_rate = 0.5
     mutation_p = 0.7        # mutation parameters
 
-#    trainers = ['trainer_5t']; gens = [200]
-#    trainers = ['trainer'];    gens = [200]
-#    trainers = ['reduced_5t']; gens = [200]
 
-    trainers = ['trainer_5t'] # warmup
-    gens = [20]
-    trainers.extend(['reduced_5t', 'reduced', 'trainer', 'reduced']*4)
-    gens.extend([15, 30, 15, 30]*4)
-    trainers.append('reduced')
-    gens.append(50)
+#    trainers = ['reduced'];
+#    trainers = ['com_11'];
+#    trainers = ['gintonicV9'];
+#    trainers = ['hyp014'];
+#    trainers = ['Union'];
+#    trainers = ['trainer'];
+
+#    trainers = ['reduced_5t'];
+#    trainers = ['com_11_5t'];
+#    trainers = ['gintonicV9_5t'];
+#    trainers = ['hyp014_5t'];
+#    trainers = ['Union_5t'];
+    trainers = ['trainer_5t'];
+
+    gens = [200]
+
+
+
+#    trainers = ['trainer_5t'] # warmup
+#    gens = [20]
+#    trainers.extend(['com_11_5t', 'gintonicV9_5t', 'hyp014_5t', 'Union_5t', 'reduced_5t'])
+#    gens.extend([15]*5)
 
     if args.self_adapt_1:
         print('Using self adapt type 1')
@@ -123,7 +136,8 @@ def main():
                 np.min(fitness[-1]),
                 np.mean(fitness[-1]),
                 np.max(fitness[-1])))
-            save_fitness(fitness)
+            if ~gen%10:
+                save_fitness(fitness)
             gen += 1
 
 
