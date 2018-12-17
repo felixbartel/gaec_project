@@ -61,6 +61,29 @@ Assuming the layers of the neural network have $n_1,\dots,n_L$ nodes we then hav
 The genotype-representation of the network is accomplished through python objects. This will allow a straightforward implementation of a wide variety of genetic operators, while having next to no impact on the speed of training.
 As the evaluation of the population is time-consuming, we do this in a thread-parallel fashion, allowing us to exploit multiple high core-count machines at our disposal.
 
+\begin{figure}
+\begin{tabular}{c|ccccccc}
+vs. & 
+\texttt{ Axji-0-2 } &
+\texttt{ COM\_11 } &
+\texttt{ GintonicV9 } &
+\texttt{ Hypo14 } &
+\texttt{ reduced } &
+\texttt{ Union } &
+\texttt{ trainer } \\
+\hline
+\texttt{ Axji-0-2 } & - & 0 & 0 & 4 & 0 & 0 & 10 \\
+\texttt{ COM\_11 } & 21 & - & 9 & 19 & 6 & 16 & 20 \\
+\texttt{ GintonicV9 } & 21 & 12 & - & 19 & 6 & 16 & 20 \\
+\texttt{ Hypo14 } & 17 & 2 & 2 & - & 2 & 5 & 15 \\
+\texttt{ reduced } & 21 & 19 & 15 & 19 & - & 19 & 21 \\
+\texttt{ Union } & 21 & 14 & 5 & 16 & 2 & - & 20 \\
+\texttt{ trainer } & 11 & 0 & 1 & 6 & 0 & 1 & -
+\end{tabular}
+\caption{scores of bots competing against each other}
+\end{figure}
+
+
 
 \section{Standard genetic algorithm}
 
