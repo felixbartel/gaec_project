@@ -5,12 +5,16 @@ import pickle
 
 parser = argparse.ArgumentParser()
 parser.add_argument('filename', nargs = '?', default = 'fitness.pkl')
+parser.add_argument('--gens')
 args = parser.parse_args()
 
 with open(args.filename, 'rb') as f:
     fitness = pickle.load(f)
 
-gen = len(fitness)
+if args.gens is None:
+    gen = len(fitness)
+else:
+    gen = args.gens
 
 fig = plt.figure(figsize=(10,6))
 font = {'family' : 'normal',
@@ -41,4 +45,5 @@ ax.set_ylim([0,1])
 
 plt.tight_layout()
 
-plt.show()
+plt.savefig(args.filename[0:-3] + 'png')
+#plt.show()

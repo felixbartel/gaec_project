@@ -34,15 +34,12 @@ def compute_fitness(pool, mode=None, thread_count=200):
             t.join()
 
 
-def save_fitness(fitness):
-    with open('fitness.pkl', 'wb') as f:
-        pickle.dump(fitness, f)
-
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--self_adapt_1', action='store_true')
     parser.add_argument('--self_adapt_2', action='store_true')
+    parser.add_argument('--bots', nargs='+')
+    parser.add_argument('--gens', nargs='+')
     args = parser.parse_args()
 
     # because 7 is a lucky number, our household mathemathican said so
@@ -54,24 +51,8 @@ def main():
     crossover_rate = 0.5
     mutation_p = 0.7        # mutation parameters
 
-
-#    trainers = ['reduced'];
-#    trainers = ['com_11'];
-#    trainers = ['gintonicV9'];
-#    trainers = ['hyp014'];
-#    trainers = ['Union'];
-#    trainers = ['trainer'];
-
-#    trainers = ['reduced_5t'];
-#    trainers = ['com_11_5t'];
-#    trainers = ['gintonicV9_5t'];
-#    trainers = ['hyp014_5t'];
-#    trainers = ['Union_5t'];
-    trainers = ['trainer_5t'];
-
-    gens = [200]
-
-
+    trainers = args.bots
+    gens = [ int(gen) for gen in args.gens ]
 
 #    trainers = ['trainer_5t'] # warmup
 #    gens = [20]
@@ -80,24 +61,32 @@ def main():
 
     if args.self_adapt_1:
         print('Using self adapt type 1')
+        fitness_fname = 'self_adapt_1'
         bot_class = BotSelfAdapt1
         n_elitism = 1
         def fbar(x):
             return (x + 0.2)**3
     elif args.self_adapt_2:
         print('Using self adapt type 2')
+        fitness_fname = 'self_adapt_2'
         bot_class = BotSelfAdapt2
         n_elitism = 1
         def fbar(x):
             return (x + 0.2)**3
     else:
         print('Using no self adaption')
+        fitness_fname = 'standard'
         bot_class = Bot
         mutation_rate = 0.5
         mutation_sigma = 0.01
         n_elitism = 10
         def fbar(x):
             return (x + 1)**2
+
+    for trainer in trainers:
+        fitness_fname += '_' + trainer
+    fitness_fname = '../fitnesses/' + fitness_fname
+    fitness_fname += '.pkl'
 
 
     pool = [bot_class.random(size) for _ in range(N)]
@@ -137,7 +126,10 @@ def main():
                 np.mean(fitness[-1]),
                 np.max(fitness[-1])))
             if ~gen%10:
-                save_fitness(fitness)
+                with open(fitness_fname, 'wb') as f:
+                    pickle.dump(fitness, f)
+
+
             gen += 1
 
 
