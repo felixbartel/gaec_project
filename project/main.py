@@ -59,23 +59,24 @@ def main():
 #    trainers.extend(['com_11_5t', 'gintonicV9_5t', 'hyp014_5t', 'Union_5t', 'reduced_5t'])
 #    gens.extend([15]*5)
 
+
     if args.self_adapt_1:
         print('Using self adapt type 1')
-        fitness_fname = 'self_adapt_1'
+        fname = 'self_adapt_1'
         bot_class = BotSelfAdapt1
         n_elitism = 1
         def fbar(x):
             return (x + 0.2)**3
     elif args.self_adapt_2:
         print('Using self adapt type 2')
-        fitness_fname = 'self_adapt_2'
+        fname = 'self_adapt_2'
         bot_class = BotSelfAdapt2
         n_elitism = 1
         def fbar(x):
             return (x + 0.2)**3
     else:
         print('Using no self adaption')
-        fitness_fname = 'standard'
+        fname = 'standard'
         bot_class = Bot
         mutation_rate = 0.5
         mutation_sigma = 0.01
@@ -84,15 +85,15 @@ def main():
             return (x + 1)**2
 
     for trainer in trainers:
-        fitness_fname += '_' + trainer
-    fitness_fname = '../fitnesses/' + fitness_fname
-    fitness_fname += '.pkl'
+        fname += '_' + trainer
 
 
     pool = [bot_class.random(size) for _ in range(N)]
     compute_fitness(pool, 'all')
     inverse_fitness_sort(pool)
     fitness = [np.array([bot.fitness for bot in pool])]
+
+    pool[0].write_lua('blobby-1.0_fast/data/.blobby/scripts/last_best.lua')
 
     gen = 1;
     for maxgen, trainer in zip(gens, trainers):
@@ -115,9 +116,9 @@ def main():
                 compute_fitness(pool)
             fitness_time = time.time() - fitness_time
             inverse_fitness_sort(pool)
-            pool[0].write_lua('nn_max.lua')
             pool = pool[0:N]
             fitness.append(np.array([bot.fitness for bot in pool]))
+            pool[0].write_lua('blobby-1.0_fast/data/.blobby/scripts/last_best.lua')
 
             print('Gen {}/{}; \ttime: {:2.4f}s/{:2.4f}s; \tmin = {:1.4f}; \tmean = {:1.4f}; \tmax = {:1.4f}'.format(
                 gen, np.sum(gens),
@@ -126,9 +127,9 @@ def main():
                 np.mean(fitness[-1]),
                 np.max(fitness[-1])))
             if ~gen%10:
-                with open(fitness_fname, 'wb') as f:
+                pool[0].write_lua('../bots/' + fname + '.lua')
+                with open('../fitnesses/' + fname + '.pkl', 'wb') as f:
                     pickle.dump(fitness, f)
-
 
             gen += 1
 
