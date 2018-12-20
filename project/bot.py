@@ -41,12 +41,12 @@ class Bot:
         return len(self.size)
 
     @classmethod
-    def random(cls, size):
+    def random(cls, size, trainer = 'trainer'):
         # creates a uniformly random bbot
         weights = []
         for j in range(len(size) - 1):
             weights.append(np.random.rand(size[j + 1], size[j] + 1) - 0.5)
-        bbot = cls(weights)
+        bbot = cls(weights, trainer)
 
         return bbot
 
@@ -117,15 +117,15 @@ class Bot:
 
 
 class BotSelfAdapt1(Bot):
-    def __init__(self, weights):
-        super().__init__(weights)
+    def __init__(self, weights, trainer = 'trainer'):
+        super().__init__(weights, trainer)
         self.mutation_rate = .0
         self.mutation_sigma = .0
 
     @classmethod
-    def random(cls, size):
+    def random(cls, size, trainer = 'trainer'):
         # creates a uniformly random bbot
-        bbot = super().random(size)
+        bbot = super().random(size, trainer)
 
         bbot.mutation_rate = np.random.rand() / 2 + 0.25
         bbot.mutation_sigma = 0.03 * np.random.rand()
@@ -144,13 +144,13 @@ class BotSelfAdapt1(Bot):
 
 
 class BotSelfAdapt2(Bot):
-    def __init__(self, weights):
-        super().__init__(weights)
+    def __init__(self, weights, trainer = 'trainer'):
+        super().__init__(weights, trainer)
         self.mutation_sigma = []
 
     @classmethod
-    def random(cls, size):
-        bbot = super().random(size)
+    def random(cls, size, trainer = 'trainer'):
+        bbot = super().random(size, trainer)
 
         bbot.mutation_sigma = [
             0.02 * np.random.rand(size[j + 1], size[j] + 1) for j in range(len(size) - 1)]
@@ -161,6 +161,6 @@ class BotSelfAdapt2(Bot):
         self.fitness = -np.inf
         for j in range(self.nlayers - 1):
             self.mutation_sigma[j] *= np.exp(
-                0.4 * np.random.randn(self.size[j + 1], self.size[j] + 1))
+                0.2 * np.random.randn(self.size[j + 1], self.size[j] + 1))
             self.weights[j] += self.mutation_sigma[j] * \
                 np.random.randn(self.size[j + 1], self.size[j] + 1)

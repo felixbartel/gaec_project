@@ -88,12 +88,13 @@ def main():
         fname += '_' + trainer
 
 
-    pool = [bot_class.random(size) for _ in range(N)]
+    pool = [bot_class.random(size, trainers[0]) for _ in range(N)]
+    pool[0].write_lua('blobby-1.0_fast/data/.blobby/scripts/last_best.lua') # it is just a random one (important if we do self training)
     compute_fitness(pool, 'all')
     inverse_fitness_sort(pool)
     fitness = [np.array([bot.fitness for bot in pool])]
+    pool[0].write_lua('blobby-1.0_fast/data/.blobby/scripts/last_best.lua') # this is really the current best
 
-    pool[0].write_lua('blobby-1.0_fast/data/.blobby/scripts/last_best.lua')
 
     gen = 1;
     for maxgen, trainer in zip(gens, trainers):
@@ -110,10 +111,7 @@ def main():
                 mutate_gaussian(offspring, mutation_p, mutation_rate, mutation_sigma)
             pool = pool[0:n_elitism] + offspring
             fitness_time = time.time()
-            if tr_gen % 5 == 0:
-                compute_fitness(pool, 'all')
-            else:
-                compute_fitness(pool)
+            compute_fitness(pool, 'all')
             fitness_time = time.time() - fitness_time
             inverse_fitness_sort(pool)
             pool = pool[0:N]
