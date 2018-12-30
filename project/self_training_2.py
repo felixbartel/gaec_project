@@ -47,7 +47,7 @@ def main():
     N = 100                 # population size
     n_offspring = 150
     crossover_p = 0.9       # crossove parameters
-    crossover_rate = 0.5
+    crossover_rate = 0.4
     mutation_p = 0.7        # mutation parameters
 
     gens = int(args.gens)
