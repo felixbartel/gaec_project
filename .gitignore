@@ -19,4 +19,13 @@ project_proposal/*.pdf
 project_proposal/*.gz
 project_proposal/*.bbl
 project_proposal/*.blg
+documentation/*.aux
+documentation/*.fdb_latexmk
+documentation/*.fls
+documentation/*.log
+documentation/*.out
+documentation/*.pdf
+documentation/*.gz
+documentation/*.bbl
+documentation/*.blg
 *.pkl

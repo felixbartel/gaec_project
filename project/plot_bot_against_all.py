@@ -12,7 +12,8 @@ with open('blobby-1.0_fast/data/.blobby/config.xml', 'r') as f:
 bots_x =  glob.glob("../bots/*")
 bots_x = [ os.path.basename(bot) for bot in bots_x ]
 bots_x = [ bot[0:-4] for bot in bots_x ]
-bots_y = ['reduced', 'com_11', 'gintonicV9', 'hyp014', 'Union', 'trainer']
+bots_x.sort()
+bots_y = [ 'trainer', 'Union', 'hyp014', 'com_11', 'gintonicV9', 'reduced', 'trainer_5t', 'Union_5t', 'hyp014_5t', 'com_11_5t', 'gintonicV9_5t', 'reduced_5t' ]
 
 fitnesses = []
 for bot in bots_x:
@@ -49,8 +50,9 @@ for j in range(len(bots_y)):
 
 plt.ylabel('sum over fitness')
 plt.title('fitnesses')
-plt.xticks(rotation=70)
+plt.xticks(rotation=90)
 plt.xticks(range(len(bots_x)), bots_x)
+plt.subplots_adjust(bottom=0.5)
 plt.legend(p, bots_y)
 
 plt.show()
