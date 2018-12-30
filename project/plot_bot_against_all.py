@@ -52,6 +52,7 @@ plt.ylabel('sum over fitness')
 plt.title('fitnesses')
 plt.xticks(rotation=90)
 plt.xticks(range(len(bots_x)), bots_x)
+plt.xlim([-.5,4])
 plt.subplots_adjust(bottom=0.5)
 plt.legend(p, bots_y)
 
