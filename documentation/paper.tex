@@ -46,13 +46,14 @@
 \section{Introduction}
 
 
-\todo{include reference \cite{Garis90geneticprogramming} (beginning of neuroevolution, cited by Sims)}
-\todo{include reference \cite{Sims94evolving3d} (Sims himself)}
 
-We want to apply a genetic algorithm to a neural network which is known as neuroevolution.
-A big advantage of this scheme is that one only needs an indicator how good the neural network performs given a certain task.
+Undoubtedly, the neural network architecture has been the star of the machine learning resurgence of the past few years. It's provable quality of being an universal function approximator makes it a sensible choice for various applications from control to . The main algorithm used for training, backpropagation however is subject to an array of criticism from various authors \cite{some_papers_about_backprop}, and there are various attempts at improving or replacing it \cite{that_paper_where_ga_beats_backprop}.
+\todo{Add a sentence of context for \cite{Sims94evolving3d} and \cite{Garis90geneticprogramming}}
+
+In this work we explore some properties of neuroevolution, the technique of applying a genetic algorithm to a neural network \cite{Garis90geneticprogramming} \cite{Sims94evolving3d}.
+A big advantage of this scheme is that for a series of different inputs a single scalar indicator of performance is sufficient in order to optimize a neural network for a certain task.
 This can for instance be given by the outcome of a game.
-Our game of choice was Blobby Volley 2 which is a simple two-dimensional volleyball game with open source written in C++ with lua support, see Figure \ref{fig:screenshot}.
+Our game of choice is Blobby Volley 2 which is an open source, simple two-dimensional volleyball game written in C++ with lua support. See Figure \ref{fig:screenshot}.
 
 \begin{figure}[H]
 \center
@@ -61,43 +62,49 @@ Our game of choice was Blobby Volley 2 which is a simple two-dimensional volleyb
 \label{fig:screenshot}
 \end{figure}
 
-A scene from the game could be described by the $x$- and $y$-coordinates of the players and the ball, their corresponding velocities and the current number of ball contacts.
-These arguments or a subset of them could then be used as input for the neural network.
-The output would then be the players movement which only consists of going right, left or jumping.
-Assuming the layers of the neural network have $n_1,\dots,n_L$ nodes we then have to optimize \[N = \sum_{l=1}^{L-1} (n_l+1) \, n_{l+1}\] number of variables if we fix the size of the network.
+\section{Training environment}
 
-The genotype-representation of the network is accomplished through python objects. This will allow a straightforward implementation of a wide variety of genetic operators, while having next to no impact on the speed of training.
-As the evaluation of the population is time-consuming, we do this in a thread-parallel fashion, allowing us to exploit multiple high core-count machines at our disposal.
+A scene from the game could be described by the $x$- and $y$-coordinates of the players and the ball, their corresponding velocities and the current number of ball contacts.
+These arguments or a subset of them can then be used as input for the neural network.
+The output should correspond to the possible movement options of the player, which consists of going right, going left, or jumping.
+Assuming the layers of the neural network have $n_1,\dots,n_L$ nodes we then have to optimize \(N = \sum_{l=1}^{L-1} (n_l+1) \, n_{l+1}\) number of variables.
+
+The game comes bundled with a number of bots with different styles, that are designed to pose a challenge to a wide range of human opponents. In order to define a clean ranking between them, we recorded the score of all possible lineups. The results can be seen in table no. \ref{tab:bot_vs_bot}.
+\todo{explain the table}
 
 \begin{figure}[H]
 \begin{tabular}{c|ccccccc}
-vs. & 
-\texttt{ Axji-0-2 } &
-\texttt{ COM\_11 } &
-\texttt{ GintonicV9 } &
-\texttt{ Hypo14 } &
-\texttt{ reduced } &
-\texttt{ Union } &
-\texttt{ trainer } \\
+vs. &
+\texttt{Axji-0-2} &
+\texttt{COM\_11} &
+\texttt{GintonicV9} &
+\texttt{Hypo14} &
+\texttt{reduced} &
+\texttt{Union} &
+\texttt{trainer} \\
 \hline
-\texttt{ Axji-0-2 } & - & 0 & 0 & 4 & 0 & 0 & 10 \\
-\texttt{ COM\_11 } & 21 & - & 9 & 19 & 6 & 16 & 20 \\
-\texttt{ GintonicV9 } & 21 & 12 & - & 19 & 6 & 16 & 20 \\
-\texttt{ Hypo14 } & 17 & 2 & 2 & - & 2 & 5 & 15 \\
-\texttt{ reduced } & 21 & 19 & 15 & 19 & - & 19 & 21 \\
-\texttt{ Union } & 21 & 14 & 5 & 16 & 2 & - & 20 \\
-\texttt{ trainer } & 11 & 0 & 1 & 6 & 0 & 1 & -
+\texttt{Axji-0-2} & - & 0 & 0 & 4 & 0 & 0 & 10 \\
+\texttt{COM\_11} & 21 & - & 9 & 19 & 6 & 16 & 20 \\
+\texttt{GintonicV9} & 21 & 12 & - & 19 & 6 & 16 & 20 \\
+\texttt{Hypo14} & 17 & 2 & 2 & - & 2 & 5 & 15 \\
+\texttt{reduced} & 21 & 19 & 15 & 19 & - & 19 & 21 \\
+\texttt{Union} & 21 & 14 & 5 & 16 & 2 & - & 20 \\
+\texttt{trainer} & 11 & 0 & 1 & 6 & 0 & 1 & -
 \end{tabular}
-\caption{scores of bots competing against each other}
+\label{tab:bot_vs_bot}
+\caption{Scores of bots competing against each other}
 \end{figure}
 
-\todo{explain the table}
-
+\section{Implementation}
+The genotype-representation of the network is accomplished through python objects. This allows a straightforward implementation of a wide variety of genetic operators. Since our algorithm is constrained overwhelmingly by evaluation time, these inefficient but easy to modify structures do not impact performance.
+As the evaluation of the population is time-consuming, we do this in a thread-parallel fashion, allowing us to exploit multiple high core-count machines at our disposal.
 
 \section{Standard genetic algorithm}
 
-fixed the size of the neural network to $6$ input nodes, one hidden layer with $7$ nodes and $2$ output nodes.
+\subsection{Network architecture}
 
+For the whole experiment, we fixed the size of the neural network to $6$ input nodes, one hidden layer with $7$ nodes and $2$ output nodes. As can be seen later, this proved sufficient for a surprisingly high performance for the network. The input nodes got fed with the x and y positions of the player, it's relative position compared to the ball, and the velocity vector of the ball.
+The output nodes consisted of two neurons with tanh activations, one responsible for going left or right in the next timestep (if the output was below or above of threshold values $t_l = 0.49, t_r = 0.51$) and the other for jumping (when above threshold $t_j = 0.7$).
 
 \subsection{Crossover}
 
@@ -109,7 +116,7 @@ As crossover we randomly mixed the nodes with belonging weights and biases of tw
 Mutation is accomplished by adding Gaussian noise to a subset of all weights and biases.
 
 
-\subsection{scheme}
+\subsection{Scheme}
 
 Furthermore we implemented elitism.
 
@@ -170,8 +177,8 @@ The simplification gives the evolutionary algorithm the opportunity to start opt
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/standard_5t.png}
-\caption{trained bots against all other}
-\label{fig:standard_5t}
+\caption{Trained bots against all other}
+\label{fig:standard_5t_aa}
 \end{figure}
 
 \todo{conclusion: better, and not only for 5t bots (algorithm has something to grab on)}
@@ -204,7 +211,7 @@ The simplification gives the evolutionary algorithm the opportunity to start opt
 \center
 \includegraphics[width=0.4\textwidth]{img/self_adapt_1.png}
 \caption{trained bots against all other}
-\label{fig:self_adapt_1}
+\label{fig:self_adapt_1_aa}
 \end{figure}
 
 \todo{we can see that the algorithm is converging}
@@ -230,7 +237,7 @@ The simplification gives the evolutionary algorithm the opportunity to start opt
 \center
 \includegraphics[width=0.4\textwidth]{img/self_adapt_2_5t.png}
 \caption{trained bots against all other}
-\label{fig:self_adapt_2_5t}
+\label{fig:self_adapt_2_5t_aa}
 \end{figure}
 
 \todo{now it's pretty}
@@ -261,7 +268,7 @@ The simplification gives the evolutionary algorithm the opportunity to start opt
 \center
 \includegraphics[width=0.4\textwidth]{img/self_adapt_2.png}
 \caption{trained bots against all other}
-\label{fig:self_adapt_2}
+\label{fig:self_adapt_2_aa}
 \end{figure}
 
 \todo{similar to section before without 5t}
@@ -286,7 +293,7 @@ The simplification gives the evolutionary algorithm the opportunity to start opt
 \center
 \includegraphics[width=0.4\textwidth]{img/self_adapt_2_5t.png}
 \caption{trained bots against all other}
-\label{fig:self_adapt_2_5t}
+\label{fig:self_adapt_2_5t_aa}
 \end{figure}
 
 \todo{not very predictable behaviour}
