@@ -95,6 +95,11 @@ vs. &
 \caption{Scores of bots competing against each other}
 \end{figure}
 
+We implemented our own bot to act as an initial trainer \texttt{trainer} for the network.
+This trainer is easier to defeat.
+We made a copy of each bot where it gives up after a certain amount of touches with the ball, such that normal gameplay will be rewarded.
+The simplification gives the evolutionary algorithm the opportunity to start optimizing the neural network in a valid direction, without introducing additional factors to the fitness score.
+
 \section{Implementation}
 The genotype-representation of the network is accomplished through python objects. This allows a straightforward implementation of a wide variety of genetic operators. Since our algorithm is constrained overwhelmingly by evaluation time, these inefficient but easy to modify structures do not impact performance.
 As the evaluation of the population is time-consuming, we do this in a thread-parallel fashion, allowing us to exploit multiple high core-count machines at our disposal.
@@ -106,26 +111,16 @@ As the evaluation of the population is time-consuming, we do this in a thread-pa
 For the whole experiment, we fixed the size of the neural network to $6$ input nodes, one hidden layer with $7$ nodes and $2$ output nodes. As can be seen later, this proved sufficient for a surprisingly high performance for the network. The input nodes got fed with the x and y positions of the player, it's relative position compared to the ball, and the velocity vector of the ball.
 The output nodes consisted of two neurons with tanh activations, one responsible for going left or right in the next timestep (if the output was below or above of threshold values $t_l = 0.49, t_r = 0.51$) and the other for jumping (when above threshold $t_j = 0.7$).
 
-\subsection{Crossover}
+\subsection{Scheme}
+The algorithm worked with a population size of 100, with 150 offspring after crossover. Our survivor selection strategy was elitism, selecting from the pool of children plus the 10 best parents from the last generation.
 
-As crossover we randomly mixed the nodes with belonging weights and biases of two networks and chose the parents via the fitness proportional roulette wheel selection.
-
+The fitness function was the normalized point difference after $21$ serves.
 
 \subsection{Mutation}
+Mutation is accomplished by adding Gaussian noise to a subset of all weights and biases. \todo{Default values, rate of change}
 
-Mutation is accomplished by adding Gaussian noise to a subset of all weights and biases.
-
-
-\subsection{Scheme}
-
-Furthermore we implemented elitism.
-
-fitness is the normalized point difference after $21$ serves.
-
-We implemented our own bot to act as an initial trainer \texttt{trainer} for the network.
-This trainer is easier to defeat.
-We made a copy of each bot where it gives up after a certain amount of touches with the ball, such that normal gameplay will be rewarded.
-The simplification gives the evolutionary algorithm the opportunity to start optimizing the neural network in a valid direction, without introducing additional factors to the fitness score.
+\subsection{Crossover}
+As crossover we randomly mixed the nodes with belonging weights and biases of two networks and chose the parents via the fitness proportional roulette wheel selection. \todo{cite roulett wheel sel.}
 
 
 \subsection{Numerical tests}
@@ -142,7 +137,7 @@ The simplification gives the evolutionary algorithm the opportunity to start opt
 \includegraphics[width=0.3\textwidth]{img/standard_Union.png} &
 \includegraphics[width=0.3\textwidth]{img/standard_trainer.png}
 \end{tabular}
-\caption{Fitness density with indicated minimum, average and maximum.}
+\caption{Fitness density with indicated minimum, average and maximum while training against different bots. \todo{is this true?}}
 \label{fig:standard}
 \end{figure}
 
