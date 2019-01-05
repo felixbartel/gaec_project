@@ -108,11 +108,11 @@ As the evaluation of the population is time-consuming, we do this in a thread-pa
 
 \subsection{Network architecture}
 
-For the whole experiment, we fixed the size of the neural network to $6$ input nodes, one hidden layer with $7$ nodes and $2$ output nodes. As can be seen later, this proved sufficient for a surprisingly high performance for the network. The input nodes got fed with the x and y positions of the player, it's relative position compared to the ball, and the velocity vector of the ball.
-The output nodes consisted of two neurons with tanh activations, one responsible for going left or right in the next timestep (if the output was below or above of threshold values $t_l = 0.49, t_r = 0.51$) and the other for jumping (when above threshold $t_j = 0.7$).
+For the whole experiment, we fixed the size of the neural network to $6$ input nodes, one hidden layer with $7$ nodes and $2$ output nodes. As can be seen later, this proved sufficient for a surprisingly high performance by the network. The input nodes got fed with the x and y positions of the player, it's relative position compared to the ball, and the velocity vector of the ball.
+The output nodes consisted of two neurons with tanh activations, one responsible for going left or right in the next timestep (if the output was below or above of threshold values $t_l = 0.49, t_r = 0.51$) and the other for jumping (above threshold $t_j = 0.7$).
 
 \subsection{Scheme}
-The algorithm worked with a population size of 100, with 150 offspring after crossover. Our survivor selection strategy was elitism, selecting from the pool of children plus the 10 best parents from the last generation.
+The algorithm worked with a population size of 100, with 150 offspring after crossover. Our survivor selection strategy was elitism, selecting from the pool of children, plus the 10 best parents from the last generation.
 
 The fitness function was the normalized point difference after $21$ serves.
 
@@ -144,7 +144,7 @@ As crossover we randomly mixed the nodes with belonging weights and biases of tw
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/standard.png}
-\caption{trained bots against all other}
+\caption{trained bots against all other \todo{explain this pls}}
 \label{fig:standard}
 \end{figure}
 
