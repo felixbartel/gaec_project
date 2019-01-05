@@ -103,6 +103,7 @@ The simplification gives the evolutionary algorithm the opportunity to start opt
 \section{Implementation}
 The genotype-representation of the network is accomplished through python objects. This allows a straightforward implementation of a wide variety of genetic operators. Since our algorithm is constrained overwhelmingly by evaluation time, these inefficient but easy to modify structures do not impact performance.
 As the evaluation of the population is time-consuming, we do this in a thread-parallel fashion, allowing us to exploit multiple high core-count machines at our disposal.
+\todo{This was a big part of the work, put more emphasis here}
 
 \section{Standard genetic algorithm}
 
