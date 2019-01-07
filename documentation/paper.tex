@@ -301,7 +301,7 @@ It's possible that with increasing the number of generations this algorithm woul
 \begin{figure}[H]
 \center
 \begin{tabular}{ccc}
-Standard & Per-individual s. a. & Per-parameter s. a. \\
+standard & per-individual s. a. & per-parameter s. a. \\
 \includegraphics[width=0.3\textwidth]{img/standard_gintonicV9_5t_com_11_5t_gintonicV9_com_11.png} &
 \includegraphics[width=0.3\textwidth]{img/self_adapt_1_gintonicV9_5t_com_11_5t_gintonicV9_com_11.png} &
 \includegraphics[width=0.3\textwidth]{img/self_adapt_2_gintonicV9_5t_com_11_5t_gintonicV9_com_11.png} \\
@@ -352,41 +352,32 @@ Since we start out with evaluating against easy opponents, it's a possibility fo
 
 \subsection{Two-species all vs best}
 
-This implementation of the idea from \cite{Sims94evolving3d} uses two species that are always evaluated against the other.
+This implementation of the idea from \cite{Sims94evolving3d} uses two species that are always evaluated against the other. We evaluated
 
 \todo{Did we have two 100 sized pops here?}
 
 \begin{figure}[H]
 \center
 \includegraphics[width=0.155555\textwidth]{img/scheme_self_training_2.png}
-\caption{Scheme for self training variant 1}
+\caption{Scheme for two-species all vs best self training; source: \cite{Sims94evolving3d}.}
 \label{fig:scheme_self_training_2}
 \end{figure}
 
 \begin{figure}[H]
 \center
 \begin{tabular}{cc}
-left side & right side \\
+standard left side & standard right side \\
 \includegraphics[width=0.3\textwidth]{img/standard_self_training_2_1.png} &
 \includegraphics[width=0.3\textwidth]{img/standard_self_training_2_2.png} \\
-\end{tabular}
-\caption{Fitness density with indicated minimum, average and maximum standard mutation.}
-\label{fig:standard_self_training_2}
-\end{figure}
-
-\todo{too much diversity}
-
-
-\begin{figure}[H]
-\center
-\begin{tabular}{cc}
-left side & right side \\
+self-adapt left side & self-adapt right side \\
 \includegraphics[width=0.3\textwidth]{img/self_adapt_1_self_training_2_1_oldrun.png} &
 \includegraphics[width=0.3\textwidth]{img/self_adapt_1_self_training_2_2_oldrun.png}
 \end{tabular}
-\caption{Fitness density with indicated minimum, average and maximum with self adapt 1.}
+\caption{Fitness density two-species all vs best method with indicated minimum, average and maximum.}
 \label{fig:self_adapt_1_self_training_2_oldrun}
 \end{figure}
+
+In this scenario \ref{fig:self_adapt_1_self_training_2_oldrun}
 
 \todo{sadly they do not change too often}
 \todo{there is still improvement even though it can not be seen in the plots because they improve themselves}
