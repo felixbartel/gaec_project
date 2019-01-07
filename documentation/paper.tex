@@ -377,10 +377,9 @@ self-adapt left side & self-adapt right side \\
 \label{fig:self_adapt_1_self_training_2_oldrun}
 \end{figure}
 
-In this scenario \ref{fig:self_adapt_1_self_training_2_oldrun}
+\todo{too much diversity <<-- what does this mean?}
 
-\todo{sadly they do not change too often}
-\todo{there is still improvement even though it can not be seen in the plots because they improve themselves}
+In this scenario \ref{fig:self_adapt_1_self_training_2_oldrun} can be seen battling for being the better species in the beginning, but then this seems to converge. A quick manual check confirms however, that they are both still actively learning. When left alone to train for 8000 generations (figure \ref{fig:self_adapt1_self_training_2}) we get the best results so far (figure \ref{fig:self_training_2}). The only bot capable of matching this network is the strongest \texttt{reduced} bot, but it never trained against any of the built-in bots directly. (In fact, this network was too strong even for us humans to beat in the game.)
 
 \begin{figure}[H]
 \center
@@ -399,8 +398,6 @@ left side & right side \\
 \caption{Best individuals against all bots.}
 \label{fig:self_training_2}
 \end{figure}
-
-\todo{we got a pretty awesome bot there which gets beaten only by reduced but never trained against it}
 
 \section{Discussion and Future Ideas}
 
