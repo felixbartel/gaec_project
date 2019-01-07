@@ -61,14 +61,14 @@ def main():
 
 
     if args.self_adapt_1:
-        print('Using self adapt type 1')
+        print('Using self adapt type 1') # Per-individual self adapt
         fname = 'self_adapt_1'
         bot_class = BotSelfAdapt1
         n_elitism = 1
         def fbar(x):
             return (x + 0.2)**3
     elif args.self_adapt_2:
-        print('Using self adapt type 2')
+        print('Using self adapt type 2') # Per-param self adapt
         fname = 'self_adapt_2'
         bot_class = BotSelfAdapt2
         n_elitism = 1

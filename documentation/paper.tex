@@ -9,7 +9,7 @@
 \usepackage{cite}
 \usepackage[hidelinks]{hyperref}
 \usepackage{float} % use H in figure placement
-\pagenumbering{gobble}
+% \pagenumbering{gobble}
 
 %}}}
 %{{{ graphics
@@ -34,23 +34,25 @@
 
 %===============================================================================
 
-\date{}
-\title{todo: think about good title}
+\date{\today}
+\title{Really Good Title}
+\subtitle{Genetic Algorithms and Evolutionary Computing Project}
 \author{Felix Bartel and D\'avid Kerekes}
 
 
 \begin{document}
 
 \maketitle
+\todo{think about good title}
 
 \section{Introduction}
 
 
 
-Undoubtedly, the neural network architecture has been the star of the machine learning resurgence of the past few years. It's provable quality of being an universal function approximator makes it a sensible choice for various applications from control to . The main algorithm used for training, backpropagation however is subject to an array of criticism from various authors \cite{some_papers_about_backprop}, and there are various attempts at improving or replacing it \cite{that_paper_where_ga_beats_backprop}.
+Undoubtedly, the neural network architecture has been the star of the machine learning resurgence of the past few years. It's provable quality of being an universal function approximator makes it a sensible choice for various applications. The main algorithm used for training, backpropagation however is subject to an array of criticism from various authors \cite{some_papers_about_backprop}, and there are various attempts at improving or replacing it \cite{that_paper_where_ga_beats_backprop}.
 \todo{Add a sentence of context for \cite{Sims94evolving3d} and \cite{Garis90geneticprogramming}}
 
-In this work we explore some properties of neuroevolution, the technique of applying a genetic algorithm to a neural network \cite{Garis90geneticprogramming} \cite{Sims94evolving3d}.
+In this project we explore some properties of neuroevolution, the technique of applying a genetic algorithm to a neural network \cite{Garis90geneticprogramming} \cite{Sims94evolving3d}.
 A big advantage of this scheme is that for a series of different inputs a single scalar indicator of performance is sufficient in order to optimize a neural network for a certain task.
 This can for instance be given by the outcome of a game.
 Our game of choice is Blobby Volley 2 which is an open source, simple two-dimensional volleyball game written in C++ with lua support. See Figure \ref{fig:screenshot}.
@@ -102,10 +104,10 @@ The simplification gives the evolutionary algorithm the opportunity to start opt
 
 \section{Implementation}
 The genotype-representation of the network is accomplished through python objects. This allows a straightforward implementation of a wide variety of genetic operators. Since our algorithm is constrained overwhelmingly by evaluation time, these inefficient but easy to modify structures do not impact performance.
-As the evaluation of the population is time-consuming, we do this in a thread-parallel fashion, allowing us to exploit multiple high core-count machines at our disposal.
-\todo{This was a big part of the work, put more emphasis here}
+As the evaluation of the population is time-consuming, we do this in a thread-parallel fashion, allowing us to exploit multiple high core-count machines at our disposal. In order to achieve this, we modified the original game by replacing the graphics and sound modules with dummies.
 
-\section{Standard genetic algorithm}
+\section{Initial genetic algorithm}
+Here we describe our starting point for the genetic algorithm. All subsequent versions are based off of this variant, with not mentioned details staying the same.
 
 \subsection{Network architecture}
 
@@ -113,18 +115,19 @@ For the whole experiment, we fixed the size of the neural network to $6$ input n
 The output nodes consisted of two neurons with tanh activations, one responsible for going left or right in the next timestep (if the output was below or above of threshold values $t_l = 0.49, t_r = 0.51$) and the other for jumping (above threshold $t_j = 0.7$).
 
 \subsection{Scheme}
-The algorithm worked with a population size of 100, with 150 offspring after crossover. Our survivor selection strategy was elitism, selecting from the pool of children, plus the 10 best parents from the last generation.
+The algorithm worked with a population size of 100, with 150 offspring after crossover. Our survivor selection strategy was elitism, selecting from the pool of children plus the 10 best parents from the last generation.
 
 The fitness function was the normalized point difference after $21$ serves.
 
 \subsection{Mutation}
-Mutation is accomplished by adding Gaussian noise to a subset of all weights and biases. \todo{Default values, rate of change}
+Mutation is accomplished by adding Gaussian noise to a subset of all weights and biases. We selected an individual for mutation with a probability of $0.7$, which then had a per-neuron mutation rate of $0.5$, and a sigma of $0.01$.
 
 \subsection{Crossover}
-As crossover we randomly mixed the nodes with belonging weights and biases of two networks and chose the parents via the fitness proportional roulette wheel selection. \todo{cite roulett wheel sel.}
+As crossover we randomly mixed the nodes with belonging weights and biases of two networks and chose the parents via the fitness proportional roulette wheel selection.
 
 
 \subsection{Numerical tests}
+We trained six networks, each against a different bot. We test the generalization of both the training method and the best specimens by evaluating all the networks against all the bots. A score for each network is calculated by summing up it's fitness value for all cases (see Fig. \ref{fig:standard_c}), so a network consistently beating all opponents would receive a score of 12. We expect that a good training method would produce networks that all beat their respective trainers and also fare well against other opponents. The chances of happening upon a network that can exploit a trainer by "accident" (but is susceptible to abuse from a human player for example) decrease exponentially by evaluating on multiple opponents.
 
 \begin{figure}[H]
 \center
@@ -138,21 +141,18 @@ As crossover we randomly mixed the nodes with belonging weights and biases of tw
 \includegraphics[width=0.3\textwidth]{img/standard_Union.png} &
 \includegraphics[width=0.3\textwidth]{img/standard_trainer.png}
 \end{tabular}
-\caption{Fitness density with indicated minimum, average and maximum while training against different bots. \todo{is this true?}}
+\caption{Fitness density with indicated minimum, average and maximum while training against different bots.}
 \label{fig:standard}
 \end{figure}
 
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/standard.png}
-\caption{trained bots against all other \todo{explain this pls}}
-\label{fig:standard}
+\caption{Cumulative sum of the trained neural networks against all the bots.}
+\label{fig:standard_c}
 \end{figure}
 
-\todo{coclusion: bots too hard we therefore reward gameplay by the *\_5t bots}
-
-\todo{introduce the goal of an overall good bot and explain the plot along the way (added fitnesses (score of 12 would mean winneing every point against every bot))}
-
+We can see that the algorithm achieves reasonable scores against the two easiest opponents, \texttt{trainer} and \texttt{hyp014}. Since we were not able to get significantly better results by hyperparameter-tweaking, we theorized that the discrepancy might come from the trainers being too hard to beat by any initial network mutation, therefore providing the same zero fitness for any single useful mutation. Therefore we introduced a weaker, "benevolent" set of trainers that give up after scoring five points by not returning the ball anymore. This lets a specimen that can pass initial serves back receive a positive fitness score. These bots are marked by appending the \texttt{\_5t} suffix to their name.
 
 \begin{figure}[H]
 \center
@@ -173,17 +173,17 @@ As crossover we randomly mixed the nodes with belonging weights and biases of tw
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/standard_5t.png}
-\caption{Trained bots against all other}
+\caption{Trained networks against all other bots.}
 \label{fig:standard_5t_aa}
 \end{figure}
 
-\todo{conclusion: better, and not only for 5t bots (algorithm has something to grab on)}
+As Fig. \ref{fig:standard_5t} and \ref{fig:standard_5t_aa} show, the networks evolved against the benevolent trainers give significantly better performance against the whole batch of bots, reaching twice the maximum cumulative score.
 
-\todo{overall: not very pretty graphs -> need self adaption}
+\section{Per-individual self adaptation}
 
-\section{Self adapt 1}
+\todo{overall: not very pretty graphs <<-- Why do we decided to do self adaptation?}
 
-\todo{explain what we are doing}
+We first implemented a method similar to (4) from \cite{self_adapt}, giving each individual a mutation rate and a sigma value. These were mutated when the individual was selected for mutation. Their initialization was also random, in the range of [0.25, 0.75] for the mutation rate and [0, 0.03] for the sigma values.
 
 \subsection{Numerical tests}
 
@@ -206,12 +206,9 @@ As crossover we randomly mixed the nodes with belonging weights and biases of tw
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/self_adapt_1.png}
-\caption{trained bots against all other}
+\caption{Trained networks against all other bots.}
 \label{fig:self_adapt_1_aa}
 \end{figure}
-
-\todo{we can see that the algorithm is converging}
-\todo{because trainer is beatable, the nn has something to grab on and performs way better thatn the others}
 
 \begin{figure}[H]
 \center
@@ -232,15 +229,17 @@ As crossover we randomly mixed the nodes with belonging weights and biases of tw
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/self_adapt_2_5t.png}
-\caption{trained bots against all other}
-\label{fig:self_adapt_2_5t_aa}
+\caption{Trained networks against all other bots.}
+\label{fig:self_adapt_1_5t_aa}
 \end{figure}
 
-\todo{now it's pretty}
-\todo{trainer\_5t bad because it is very easy to beat and therefore we can get loast in a local optimum real quick}
+We can see in figures \ref{self_adapt_1_5t} and \ref{self_adapt_1_5t_aa} that the results improve significantly in both cases. Self adaptation causes the networks trained on \texttt{_5t} opponents to get consistent results across the board.
 
-\section{Self adapt 2}
+\todo{trainer\_5t does not coincide on the two graphs, what happened? We get a good result against trainer_5t according to the bottom graph}
 
+\section{Per-parameter self adaptation}
+
+We also explored a method similar to (5) in \cite{self_adapt}, where each parameter gets it's own mutation sigma parameter. This produces similar results to the harsh teachers with per-individual self adaptation
 
 \subsection{Numerical tests}
 
@@ -263,7 +262,7 @@ As crossover we randomly mixed the nodes with belonging weights and biases of tw
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/self_adapt_2.png}
-\caption{trained bots against all other}
+\caption{Trained networks against all other bots.}
 \label{fig:self_adapt_2_aa}
 \end{figure}
 
@@ -288,7 +287,7 @@ As crossover we randomly mixed the nodes with belonging weights and biases of tw
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/self_adapt_2_5t.png}
-\caption{trained bots against all other}
+\caption{Trained networks against all other bots.}
 \label{fig:self_adapt_2_5t_aa}
 \end{figure}
 
@@ -317,7 +316,7 @@ standard & self adapt 1 & self adapt 2 \\
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/change.png}
-\caption{trained bots against all other}
+\caption{Trained networks against all other bots.}
 \label{fig:change}
 \end{figure}
 
@@ -352,7 +351,7 @@ standard & self adapt 1\\
 \begin{figure}[H]
 \center
 \includegraphics[width=0.3\textwidth]{img/self_training_1.png}
-\caption{trained bots against all other}
+\caption{Trained networks against all other bots.}
 \label{fig:self_training_1}
 \end{figure}
 
@@ -410,13 +409,15 @@ left side & right side \\
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/self_training_2.png}
-\caption{trained bots against all other}
+\caption{Trained networks against all other bots.}
 \label{fig:self_training_2}
 \end{figure}
 
 \todo{we got a pretty awesome bot there which gets beaten only by reduced but never trained against it}
 
 \section{Discussion and Future Ideas}
+
+\todo{rationalize not messing around with more mutation and crossover types as we promised}
 
 \todo{everything we have not done}
 \todo{train the self trained bot with reduced so we maybe get a perfect score of 12}

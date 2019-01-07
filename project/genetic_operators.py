@@ -56,6 +56,7 @@ def mutate_gaussian(bots, mutation_p, *args):
             if np.random.rand() < mutation_p:
                 bots[n].mutate_gaussian(rate, sigma)
     else:
+        # Self-adapt variants don't have rate and sigma params
         for n in range(len(bots)):
             if np.random.rand() < mutation_p:
                 bots[n].mutate_gaussian()
