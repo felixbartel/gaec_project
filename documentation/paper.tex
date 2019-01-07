@@ -53,7 +53,7 @@ Undoubtedly, the neural network architecture has been the star of the machine le
 
 A big advantage of the neuroevolution scheme is that for a series of different inputs a single scalar indicator of performance is sufficient to optimize a neural network for a certain task.
 This can for instance be given by the outcome of a game.
-Our game of choice is Blobby Volley 2 which is an open source, simple two-dimensional volleyball game written in C++ with lua support. See Figure \ref{fig:screenshot}.
+Our game of choice is Blobby Volley 2 which is an open source, simple two-dimensional volleyball game written in C++ with lua support. Example picture in figure \ref{fig:screenshot}.
 
 \begin{figure}[H]
 \center
@@ -69,7 +69,7 @@ These arguments or a subset of them can then be used as input for the neural net
 The output should correspond to the possible movement options of the player, which consists of going right, going left, or jumping.
 Assuming the layers of the neural network have $n_1,\dots,n_L$ nodes we then have to optimize \(N = \sum_{l=1}^{L-1} (n_l+1) \, n_{l+1}\) number of variables.
 
-The game comes bundled with a number of bots with different styles, that are designed to pose a challenge to a wide range of human opponents. In order to define a clean ranking between them, we recorded the score of all possible lineups. The results can be seen in table no. \ref{tab:bot_vs_bot}.
+The game comes bundled with a number of bots with different styles, that are designed to pose a challenge to a wide range of human opponents. In order to define a clean ranking between them, we recorded the score of all possible lineups (figure \ref{tab:bot_vs_bot}).
 \todo{explain the table}
 
 \begin{figure}[H]
@@ -95,9 +95,8 @@ vs. &
 \caption{Scores of bots competing against each other}
 \end{figure}
 
-We implemented our own bot to act as an initial trainer \texttt{trainer} for the network.
-This trainer is easier to defeat.
-We made a copy of each bot where it gives up after a certain amount of touches with the ball, such that normal gameplay will be rewarded.
+We implemented our own bot marked \texttt{trainer} to act as an initial trainer for the network.
+This trainer is easier to defeat than the other built-in players.
 The simplification gives the evolutionary algorithm the opportunity to start optimizing the neural network in a valid direction, without introducing additional factors to the fitness score.
 
 \section{Implementation}
