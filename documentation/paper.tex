@@ -173,17 +173,18 @@ We can see that the algorithm achieves reasonable scores against the two easiest
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/standard_5t.png}
-\caption{Trained networks against all other bots.}
+\caption{Best individuals against all bots.}
 \label{fig:standard_5t_aa}
 \end{figure}
 
 As Fig. \ref{fig:standard_5t} and \ref{fig:standard_5t_aa} show, the networks evolved against the benevolent trainers give significantly better performance against the whole batch of bots, reaching twice the maximum cumulative score.
 
 \section{Per-individual self adaptation}
+\label{sec:perind}
 
 \todo{overall: not very pretty graphs <<-- Why do we decided to do self adaptation?}
 
-We first implemented a method similar to (4) from \cite{self_adapt}, giving each individual a mutation rate and a sigma value. These were mutated when the individual was selected for mutation. Their initialization was also random, in the range of [0.25, 0.75] for the mutation rate and [0, 0.03] for the sigma values.
+We first implemented a method similar to (1) and (4) from \cite{self_adapt}, giving each individual a mutation rate and a sigma value. These were mutated when the individual was selected for mutation. Their initialization was also random, in the range of [0.25, 0.75] for the mutation rate and [0, 0.03] for the sigma values.
 
 \subsection{Numerical tests}
 
@@ -206,7 +207,7 @@ We first implemented a method similar to (4) from \cite{self_adapt}, giving each
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/self_adapt_1.png}
-\caption{Trained networks against all other bots.}
+\caption{Best individuals against all bots.}
 \label{fig:self_adapt_1_aa}
 \end{figure}
 
@@ -229,17 +230,19 @@ We first implemented a method similar to (4) from \cite{self_adapt}, giving each
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/self_adapt_2_5t.png}
-\caption{Trained networks against all other bots.}
+\caption{Best individuals against all bots.}
 \label{fig:self_adapt_1_5t_aa}
 \end{figure}
 
-We can see in figures \ref{self_adapt_1_5t} and \ref{self_adapt_1_5t_aa} that the results improve significantly in both cases. Self adaptation causes the networks trained on \texttt{_5t} opponents to get consistent results across the board.
+We can see in figures \ref{fig:self_adapt_1_5t} and \ref{fig:self_adapt_1_5t_aa} that the results improve significantly in both cases. Self adaptation causes the networks trained on \texttt{\_5t} opponents to get consistent results across the board.
 
-\todo{trainer\_5t does not coincide on the two graphs, what happened? We get a good result against trainer_5t according to the bottom graph}
+The surprisingly low performance against the easiest bot, \texttt{trainer\_5t} might be explained by the bot being too easy. The high initial fitness might encourage the survival of individuals with a low mutation rate, causing the algorithm to get stuck in a local optimum.
+
+\todo{trainer5t does not coincide on the two graphs, what happened? We get a good result against trainer5t according to the bottom graph}
 
 \section{Per-parameter self adaptation}
 
-We also explored a method similar to (5) in \cite{self_adapt}, where each parameter gets it's own mutation sigma parameter. This produces similar results to the harsh teachers with per-individual self adaptation
+We also explored a method similar to (2) and (5) in \cite{self_adapt}, where each parameter gets it's own mutation sigma parameter. This produces similar results to per-individual self adaptation with harsh teachers, but with benevolent teachers fails to reproduce the consistency of the other method.
 
 \subsection{Numerical tests}
 
@@ -262,11 +265,9 @@ We also explored a method similar to (5) in \cite{self_adapt}, where each parame
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/self_adapt_2.png}
-\caption{Trained networks against all other bots.}
+\caption{Best individuals against all bots.}
 \label{fig:self_adapt_2_aa}
 \end{figure}
-
-\todo{similar to section before without 5t}
 
 \begin{figure}[H]
 \center
@@ -287,24 +288,20 @@ We also explored a method similar to (5) in \cite{self_adapt}, where each parame
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/self_adapt_2_5t.png}
-\caption{Trained networks against all other bots.}
+\caption{Best individuals against all bots.}
 \label{fig:self_adapt_2_5t_aa}
 \end{figure}
 
-\todo{not very predictable behaviour}
-\todo{works good for a few examples}
-\todo{remember prof has never seen this stuff working and will be happy if it has disadvantages}
+\section{Curriculum learning}
 
-\section{Changing opponent}
+We implemented a limited set of curriculum learning, where the training happens against increasingly harder opponents \texttt{gintonicV9\_5t}, \texttt{com\_11\_5t}, \texttt{gintonicV9}, and \texttt{com\_11} for 200 generations each. These bots previously worked as solid teachers. As can be seen on \ref{fig:change}, only the Per-individual self adaptation seems to work, there's no transfer of knowledge between the different bots for the other methods.
 
-200 gen \texttt{gintonicV9\_5t}, 200 gen \texttt{com\_11\_5t}, 200 gen \texttt{gintonicV9}, 200 gen \texttt{com\_11}.
-\todo{argument with the previous plots that this is a good idea}
-\todo{other ideas?}
+It's possible that with increasing the number of generations this algorithm would produce some advantages over training with just one teacher, but we couldn't finish the longer experiment due to time constraints.
 
 \begin{figure}[H]
 \center
 \begin{tabular}{ccc}
-standard & self adapt 1 & self adapt 2 \\
+Standard & Per-individual s. a. & Per-parameter s. a. \\
 \includegraphics[width=0.3\textwidth]{img/standard_gintonicV9_5t_com_11_5t_gintonicV9_com_11.png} &
 \includegraphics[width=0.3\textwidth]{img/self_adapt_1_gintonicV9_5t_com_11_5t_gintonicV9_com_11.png} &
 \includegraphics[width=0.3\textwidth]{img/self_adapt_2_gintonicV9_5t_com_11_5t_gintonicV9_com_11.png} \\
@@ -316,26 +313,22 @@ standard & self adapt 1 & self adapt 2 \\
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/change.png}
-\caption{Trained networks against all other bots.}
+\caption{Best individuals against all bots.}
 \label{fig:change}
 \end{figure}
 
-\todo{only self adapt 1 works}
-\todo{we could do more with more generations but loose the comparebility to the previous section}
-
 \section{Self-training}
+Implementing self-training based on \cite{Sims94evolving3d}.
 
-
-\subsection{last best}
+\subsection{All vs best}
+We ran a version of the algorithm where the fitness function was evaluated on the best specimen of the last generation.
 
 \begin{figure}[H]
 \center
 \includegraphics[width=0.155555\textwidth]{img/scheme_self_training_1.png}
-\caption{Scheme for self training variant 1}
+\caption{Scheme for all vs best training; source: \cite{Sims94evolving3d}.}
 \label{fig:scheme_self_training_1}
 \end{figure}
-
-Fitness evaluated with the best bot of the last generation.
 
 \begin{figure}[H]
 \center
@@ -351,18 +344,21 @@ standard & self adapt 1\\
 \begin{figure}[H]
 \center
 \includegraphics[width=0.3\textwidth]{img/self_training_1.png}
-\caption{Trained networks against all other bots.}
+\caption{Best individuals against all bots.}
 \label{fig:self_training_1}
 \end{figure}
 
-\todo{risk to end up in local optimum like self adapt 1?}
+Since we start out with evaluating against easy opponents, it's a possibility for the algorithm to get stuck in a local optimum like it did with per-individual self adaptation. While the standard method works nice, (see figures \ref{fig:last_best} and \ref{fig:self_training_1}) the self-adaption variant fails to produce any meaningful result despite the high fitness value, thus supporting our theory from section \ref{sec:perind}.
 
+\subsection{Two-species all vs best}
 
-\subsection{two species}
+This implementation of the idea from \cite{Sims94evolving3d} uses two species that are always evaluated against the other.
+
+\todo{Did we have two 100 sized pops here?}
 
 \begin{figure}[H]
 \center
-\includegraphics[width=0.155555\textwidth]{img/scheme_self_training_1.png}
+\includegraphics[width=0.155555\textwidth]{img/scheme_self_training_2.png}
 \caption{Scheme for self training variant 1}
 \label{fig:scheme_self_training_2}
 \end{figure}
@@ -409,7 +405,7 @@ left side & right side \\
 \begin{figure}[H]
 \center
 \includegraphics[width=0.4\textwidth]{img/self_training_2.png}
-\caption{Trained networks against all other bots.}
+\caption{Best individuals against all bots.}
 \label{fig:self_training_2}
 \end{figure}
 
