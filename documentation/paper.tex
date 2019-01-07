@@ -92,7 +92,7 @@ vs. &
 \texttt{trainer} & 11 & 0 & 1 & 6 & 0 & 1 & -
 \end{tabular}
 \label{tab:bot_vs_bot}
-\caption{Scores of bots competing against each other}
+\caption{Wins of bots competing against each other}
 \end{figure}
 
 We implemented our own bot marked \texttt{trainer} to act as an initial trainer for the network.
@@ -109,7 +109,7 @@ Here we describe our starting point for the genetic algorithm. All subsequent ve
 \subsection{Network architecture}
 
 For the whole experiment, we fixed the size of the neural network to $6$ input nodes, one hidden layer with $7$ nodes and $2$ output nodes. As can be seen later, this proved sufficient for a surprisingly high performance by the network. The input nodes got fed with the x and y positions of the player, it's relative position compared to the ball, and the velocity vector of the ball.
-The output nodes consisted of two neurons with tanh activations, one responsible for going left or right in the next timestep (if the output was below or above of threshold values $t_l = 0.49, t_r = 0.51$) and the other for jumping (above threshold $t_j = 0.7$).
+The output nodes consisted of two neurons with $\tanh$ activations, one responsible for going left or right in the next timestep (if the output was below or above of threshold values $t_l = 0.49, t_r = 0.51$) and the other for jumping (above threshold $t_j = 0.7$).
 
 \subsection{Scheme}
 The algorithm worked with a population size of 100, with 150 offspring after crossover. Our survivor selection strategy was elitism, selecting from the pool of children plus the 10 best parents from the last generation.
@@ -179,9 +179,9 @@ As Fig. \ref{fig:standard_5t} and \ref{fig:standard_5t_aa} show, the networks ev
 \section{Per-individual self adaptation}
 \label{sec:perind}
 
-\todo{overall: not very pretty graphs <<-- Why do we decided to do self adaptation?}
+Since running the algorithm is still quite resource intensive, we wanted to focus on improving the algorithm itself instead of hyperparameter optimization.
 
-We first implemented a method similar to (1) and (4) from \cite{self_adapt}, giving each individual a mutation rate and a sigma value. These were mutated when the individual was selected for mutation. Their initialization was also random, in the range of [0.25, 0.75] for the mutation rate and [0, 0.03] for the sigma values.
+We first implemented a self adaptation method similar to (1) and (4) from \cite{self_adapt}, giving each individual a mutation rate and a sigma value. These were mutated when the individual was selected for mutation. Their initialization was also random, in the range of [0.25, 0.75] for the mutation rate and [0, 0.03] for the sigma values.
 
 \subsection{Numerical tests}
 
@@ -372,9 +372,7 @@ self-adapt left side & self-adapt right side \\
 \label{fig:self_adapt_1_self_training_2_oldrun}
 \end{figure}
 
-\todo{too much diversity <<-- what does this mean?}
-
-In this scenario \ref{fig:self_adapt_1_self_training_2_oldrun} can be seen battling for being the better species in the beginning, but then this seems to converge. A quick manual look at the games confirms however, that they are both still actively learning. When left alone to train for 8000 generations (figure \ref{fig:self_adapt1_self_training_2}) we get the best results so far (figure \ref{fig:self_training_2}). The only bot capable of matching this network is the strongest \texttt{reduced} bot, but it never trained against any of the built-in bots directly. (In fact, our last neural network was too strong even for us humans to beat in the game.)
+In this scenario (figure \ref{fig:self_adapt_1_self_training_2_oldrun}) the two species can be seen battling for higher fitness in the beginning, but then this seems to converge. A quick manual look at the games confirms however, that they are both still actively learning. When left alone to train for 8000 generations (figure \ref{fig:self_adapt1_self_training_2}) we get the best results so far (figure \ref{fig:self_training_2}). The only bot capable of matching this network is the strongest \texttt{reduced} bot, but it never trained against any of the built-in bots directly. (In fact, our last neural network was too strong even for us humans to beat in the game.)
 
 \begin{figure}[H]
 \center
@@ -396,12 +394,13 @@ left side & right side \\
 
 \section{Discussion and Future Ideas}
 
-In the proposal, we listed more possible mutation and crossover operators from \cite{montana1989training}, that we later decided not to implement. The main reason behind is that these extra operators were based on modifying network architecture or size. After the first promising test runs, we decided on a fixed size, fully-connected architecture supported by hyperparameter self-adaptation, so we would have the compute time to pursue the more interesting self-training approach instead of searching the hyperparameter space of multiple architecture operators. Any other connection scheme, or smaller network can be represented by setting the correct weights to zero in our bigger network.
+A video of our two self-trained bots playing games can be found at \texttt{documentation/two_species.mp4}
 
-\todo{everything we have not done}
-\todo{train the self trained bot with reduced so we maybe get a perfect score of 12}
+In the proposal, we listed more possible mutation and crossover operators from \cite{montana1989training}, that we later decided not to implement. The main reason behind is that these extra operators were based on modifying network architecture or size. After the first promising test runs, we decided on a fixed size, fully-connected architecture supported by hyperparameter self-adaptation, so we would have the compute time to pursue the more interesting self-training approach instead of searching the hyperparameter space of multiple architecture operators. Any other connection scheme, or smaller network can be represented by setting the correct weights to zero in our bigger network. We also skipped implementing tournament-selection because of time constraints.
 
-We would like to thank \todo{xyz lab or something} TU-Chemnitz for letting us use their compute servers for our experiments.
+In the future we would like to improve on our best network by combining self train and the trainers, in order to produce an undefeated champion of the game. Since the project is open-source, we also plan on contributing some of our agents back to the original.
+
+We would like to thank Faculty of Mathematics of TU-Chemnitz for letting us use their compute servers for our experiments.
 
 \bibliography{refs}{}
 \bibliographystyle{plain}
