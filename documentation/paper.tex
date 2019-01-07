@@ -47,13 +47,11 @@
 
 \section{Introduction}
 
-
-
-Undoubtedly, the neural network architecture has been the star of the machine learning resurgence of the past few years. It's provable quality of being an universal function approximator makes it a sensible choice for various applications. The main algorithm used for training, backpropagation however is subject to an array of criticism from various authors \cite{some_papers_about_backprop}, and there are various attempts at improving or replacing it \cite{that_paper_where_ga_beats_backprop}.
-\todo{Add a sentence of context for \cite{Sims94evolving3d} and \cite{Garis90geneticprogramming}}
-
 In this project we explore some properties of neuroevolution, the technique of applying a genetic algorithm to a neural network \cite{Garis90geneticprogramming} \cite{Sims94evolving3d}.
-A big advantage of this scheme is that for a series of different inputs a single scalar indicator of performance is sufficient in order to optimize a neural network for a certain task.
+
+Undoubtedly, the neural network architecture has been the star of the machine learning resurgence of the past few years. It's provable quality of being an universal function approximator makes it a sensible choice for various applications. The main algorithm used for training, backpropagation however is subject to an array of criticism from various authors \cite{zhang2007hybrid, riedmiller1993direct}, and there are various attempts at improving or replacing it \cite{montana1989training}.
+
+A big advantage of the neuroevolution scheme is that for a series of different inputs a single scalar indicator of performance is sufficient in order to optimize a neural network for a certain task.
 This can for instance be given by the outcome of a game.
 Our game of choice is Blobby Volley 2 which is an open source, simple two-dimensional volleyball game written in C++ with lua support. See Figure \ref{fig:screenshot}.
 
@@ -352,7 +350,7 @@ Since we start out with evaluating against easy opponents, it's a possibility fo
 
 \subsection{Two-species all vs best}
 
-This implementation of the idea from \cite{Sims94evolving3d} uses two species that are always evaluated against the other. We evaluated
+This implementation of the idea from \cite{Sims94evolving3d} uses two species (named left and right) that are always evaluated against the other. We evaluated
 
 \todo{Did we have two 100 sized pops here?}
 
