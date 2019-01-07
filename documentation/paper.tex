@@ -49,9 +49,9 @@
 
 In this project we explore some properties of neuroevolution, the technique of applying a genetic algorithm to a neural network \cite{Garis90geneticprogramming} \cite{Sims94evolving3d}.
 
-Undoubtedly, the neural network architecture has been the star of the machine learning resurgence of the past few years. It's provable quality of being an universal function approximator makes it a sensible choice for various applications. The main algorithm used for training, backpropagation however is subject to an array of criticism from various authors \cite{zhang2007hybrid, riedmiller1993direct}, and there are various attempts at improving or replacing it \cite{montana1989training}.
+Undoubtedly, the neural network architecture has been the star of the machine learning resurgence of the past few years. It's provable property of being an universal function approximator makes it a sensible choice for various applications. The main algorithm used for training, backpropagation however is subject to an array of criticism from authors (and even from Hinton himself), and there are various attempts at improving or replacing it \cite{zhang2007hybrid, riedmiller1993direct, montana1989training}.
 
-A big advantage of the neuroevolution scheme is that for a series of different inputs a single scalar indicator of performance is sufficient in order to optimize a neural network for a certain task.
+A big advantage of the neuroevolution scheme is that for a series of different inputs a single scalar indicator of performance is sufficient to optimize a neural network for a certain task.
 This can for instance be given by the outcome of a game.
 Our game of choice is Blobby Volley 2 which is an open source, simple two-dimensional volleyball game written in C++ with lua support. See Figure \ref{fig:screenshot}.
 
@@ -150,7 +150,7 @@ We trained six networks, each against a different bot. We test the generalizatio
 \label{fig:standard_c}
 \end{figure}
 
-We can see that the algorithm achieves reasonable scores against the two easiest opponents, \texttt{trainer} and \texttt{hyp014}. Since we were not able to get significantly better results by hyperparameter-tweaking, we theorized that the discrepancy might come from the trainers being too hard to beat by any initial network mutation, therefore providing the same zero fitness for any single useful mutation. Therefore we introduced a weaker, "benevolent" set of trainers that give up after scoring five points by not returning the ball anymore. This lets a specimen that can pass initial serves back receive a positive fitness score. These bots are marked by appending the \texttt{\_5t} suffix to their name.
+We can see that the algorithm achieves reasonable scores against the two easiest opponents, \texttt{trainer} and \texttt{hyp014}. Since we were not able to get significantly better results by hyperparameter-tweaking, we theorized that the discrepancy might come from the trainers being too hard to beat by any initial network mutation, providing the same zero fitness for any single useful mutation. Therefore we introduced a weaker, "benevolent" set of trainers that give up after scoring five points by not returning the ball anymore. This lets a specimen that can pass initial serves back receive a positive fitness score. These bots are marked by appending the \texttt{\_5t} suffix to their name.
 
 \begin{figure}[H]
 \center
@@ -350,9 +350,7 @@ Since we start out with evaluating against easy opponents, it's a possibility fo
 
 \subsection{Two-species all vs best}
 
-This implementation of the idea from \cite{Sims94evolving3d} uses two species (named left and right) that are always evaluated against the other. We evaluated
-
-\todo{Did we have two 100 sized pops here?}
+This implementation of the idea from \cite{Sims94evolving3d} uses two species (named left and right, after the side they played on in-game) that are always evaluated against the other. The population size was 100 for each of the species.
 
 \begin{figure}[H]
 \center
@@ -377,7 +375,7 @@ self-adapt left side & self-adapt right side \\
 
 \todo{too much diversity <<-- what does this mean?}
 
-In this scenario \ref{fig:self_adapt_1_self_training_2_oldrun} can be seen battling for being the better species in the beginning, but then this seems to converge. A quick manual check confirms however, that they are both still actively learning. When left alone to train for 8000 generations (figure \ref{fig:self_adapt1_self_training_2}) we get the best results so far (figure \ref{fig:self_training_2}). The only bot capable of matching this network is the strongest \texttt{reduced} bot, but it never trained against any of the built-in bots directly. (In fact, this network was too strong even for us humans to beat in the game.)
+In this scenario \ref{fig:self_adapt_1_self_training_2_oldrun} can be seen battling for being the better species in the beginning, but then this seems to converge. A quick manual look at the games confirms however, that they are both still actively learning. When left alone to train for 8000 generations (figure \ref{fig:self_adapt1_self_training_2}) we get the best results so far (figure \ref{fig:self_training_2}). The only bot capable of matching this network is the strongest \texttt{reduced} bot, but it never trained against any of the built-in bots directly. (In fact, this network was too strong even for us humans to beat in the game.)
 
 \begin{figure}[H]
 \center
@@ -399,12 +397,12 @@ left side & right side \\
 
 \section{Discussion and Future Ideas}
 
-\todo{rationalize not messing around with more mutation and crossover types as we promised}
+In the proposal, we listed more possible mutation and crossover operators from \cite{montana1989training}, that we later decided not to implement. The main reason behind is that these extra operators were based on modifying network architecture or size. After the first promising test runs, we decided on a fixed size, fully-connected architecture supported by hyperparameter self-adaptation, so we would have the compute time to pursue the more interesting self-training approach instead of searching the hyperparameter space of multiple architecture operators. Any other connection scheme, or smaller network can be represented by setting the correct weights to zero in our bigger network.
 
 \todo{everything we have not done}
 \todo{train the self trained bot with reduced so we maybe get a perfect score of 12}
-\todo{we have not used too many inputs I still coudn't beat the bot which trained itself for four hours}
-\todo{acknowledgement to the compute server}
+
+We would like to thank \todo{xyz lab or something} TU-Chemnitz for letting us use their compute servers for our experiments.
 
 \bibliography{refs}{}
 \bibliographystyle{plain}
