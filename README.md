@@ -1,12 +1,3 @@
-# TODO
-
-* [x] reprogram everything prperly
-* [x] try the left right movement with one output instead of two
-* [x] improve the threading while preserving a maximal number of them
-* [ ] try tournament selection
-* [ ] when two nodes are switched with their weights and bias the network stays the same -> find a better representation or take care of this in crossover
-* [x] try the stuff Sims proposed in his creatures paper
-
 ## Install instructions
 ### Building blobby
 Requirements: SDL2, PhysFS, boost, OpenGL.
@@ -22,3 +13,15 @@ cd project/blobby-1.0_fast
 cmake .
 make
 ```
+
+# TODO
+
+* [x] refactor everything prperly
+* [ ] refactor even more stuff properly
+* [x] add comments
+* [ ] add even more comments
+* [x] try the left right movement with one output instead of two
+* [x] improve the threading while preserving a maximal number of them
+* [ ] try tournament selection
+* [ ] when two nodes are switched with their weights and bias the network stays the same -> find a better representation or take care of this in crossover
+* [x] try the stuff Sims proposed in his creatures paper
