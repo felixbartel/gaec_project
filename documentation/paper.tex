@@ -43,7 +43,6 @@
 \begin{document}
 
 \maketitle
-\todo{think about good title}
 
 \section{Introduction}
 
@@ -69,8 +68,7 @@ These arguments or a subset of them can then be used as input for the neural net
 The output should correspond to the possible movement options of the player, which consists of going right, going left, or jumping.
 Assuming the layers of the neural network have $n_1,\dots,n_L$ nodes we then have to optimize \(N = \sum_{l=1}^{L-1} (n_l+1) \, n_{l+1}\) number of variables.
 
-The game comes bundled with a number of bots with different styles, that are designed to pose a challenge to a wide range of human opponents. In order to define a clean ranking between them, we recorded the score of all possible lineups (figure \ref{tab:bot_vs_bot}).
-\todo{explain the table}
+The game comes bundled with a number of bots with different styles, that are designed to pose a challenge to a wide range of human opponents. In order to define a clean ranking between them, we recorded the score of all possible lineups (figure \ref{tab:bot_vs_bot} contains the wins of bots in the row entry versus the column entry bot).
 
 \begin{figure}[H]
 \begin{tabular}{c|ccccccc}
@@ -92,7 +90,7 @@ vs. &
 \texttt{trainer} & 11 & 0 & 1 & 6 & 0 & 1 & -
 \end{tabular}
 \label{tab:bot_vs_bot}
-\caption{Wins of bots competing against each other}
+\caption{Scores of bots competing against each other}
 \end{figure}
 
 We implemented our own bot marked \texttt{trainer} to act as an initial trainer for the network.
