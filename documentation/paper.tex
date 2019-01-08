@@ -115,7 +115,7 @@ The algorithm worked with a population size of 100, with 150 offspring after cro
 The fitness function was the normalized point difference after $21$ serves.
 
 \subsection{Mutation}
-Mutation is accomplished by adding Gaussian noise to a subset of all weights and biases. We selected an individual for mutation with a probability of $0.7$, which then had a per-neuron mutation rate of $0.5$, and a sigma of $0.01$.
+Mutation is accomplished by adding Gaussian noise to a subset of all weights and biases. We selected an individual for mutation with a probability of $0.7$, which then had a per-neuron mutation rate of $0.5$, and a standard derivation $\sigma=0.01$.
 
 \subsection{Crossover}
 As crossover we randomly mixed the nodes with belonging weights and biases of two networks and chose the parents via the fitness proportional roulette wheel selection.
@@ -233,8 +233,6 @@ We can see in figures \ref{fig:self_adapt_1_5t} and \ref{fig:self_adapt_1_5t_aa}
 
 The surprisingly low performance against the easiest bot, \texttt{trainer\_5t} might be explained by the bot being too easy. The high initial fitness might encourage the survival of individuals with a low mutation rate, causing the algorithm to get stuck in a local optimum.
 
-\todo{trainer5t does not coincide on the two graphs, what happened? We get a good result against trainer5t according to the bottom graph}
-
 \section{Per-parameter self adaptation}
 
 We also explored a method similar to (2) and (5) in \cite{self_adapt}, where each parameter gets it's own mutation sigma parameter. This produces similar results to per-individual self adaptation with harsh teachers, but with benevolent teachers fails to reproduce the consistency of the other method.
@@ -289,7 +287,7 @@ We also explored a method similar to (2) and (5) in \cite{self_adapt}, where eac
 
 \section{Curriculum learning}
 
-We implemented a limited set of curriculum learning, where the training happens against increasingly harder opponents \texttt{gintonicV9\_5t}, \texttt{com\_11\_5t}, \texttt{gintonicV9}, and \texttt{com\_11} for 200 generations each. These bots previously worked as solid teachers. As can be seen on \ref{fig:change}, only the Per-individual self adaptation seems to work, there's no transfer of knowledge between the different bots for the other methods.
+We implemented a limited set of curriculum learning, where the training happens against increasingly harder opponents \texttt{gintonicV9\_5t}, \texttt{com\_11\_5t}, \texttt{gintonicV9}, and \texttt{com\_11} for 200 generations each. These bots previously worked as solid teachers. As can be seen on \ref{fig:change}, only the per-individual self adaptation seems to work, there's no transfer of knowledge between the different bots for the other methods.
 
 It's possible that with increasing the number of generations this algorithm would produce some advantages over training with just one teacher, but we couldn't finish the longer experiment due to time constraints.
 
@@ -392,11 +390,12 @@ left side & right side \\
 
 \section{Discussion and Future Ideas}
 
-A video of our two self-trained bots playing games can be found at \texttt{documentation/two_species.mp4}
+A video of our two self-trained bots playing games can be found under the name \texttt{two\_species.mp4}
 
 In the proposal, we listed more possible mutation and crossover operators from \cite{montana1989training}, that we later decided not to implement. The main reason behind is that these extra operators were based on modifying network architecture or size. After the first promising test runs, we decided on a fixed size, fully-connected architecture supported by hyperparameter self-adaptation, so we would have the compute time to pursue the more interesting self-training approach instead of searching the hyperparameter space of multiple architecture operators. Any other connection scheme, or smaller network can be represented by setting the correct weights to zero in our bigger network. We also skipped implementing tournament-selection because of time constraints.
 
 In the future we would like to improve on our best network by combining self train and the trainers, in order to produce an undefeated champion of the game. Since the project is open-source, we also plan on contributing some of our agents back to the original.
+This future work can be tracked on the GitHub repositoy in \cite{github_repo}.
 
 We would like to thank Faculty of Mathematics of TU-Chemnitz for letting us use their compute servers for our experiments.
 
